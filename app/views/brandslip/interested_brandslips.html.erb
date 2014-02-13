@@ -1,0 +1,62 @@
+<span style="padding-top: 34px;padding-left: 67%;padding-bottom: 10px;display: inline-block;">
+  <%= link_to 'Back to BrandSlip', home_path, :class => 'btn btn-primary' %> 
+</span>
+<div style="float: left;padding-left: 20%;margin-bottom: 10px" class="col-9"><b><span id="result_found"><%= @interested_brandslips.length %></span></b> results found.</div>
+<div style="float: left; margin-left: 20%" class="span8 pull-left">
+  <div class="row-fluid">
+    <!-- bids div -->
+    <div id="" class="pull-left span12">
+      <div class="well well-white">
+        <span style="padding: 10px;" class="msg-title">
+          Brandslips I'm Interested In
+        </span>
+        <ul class="unstyled" style="padding-left: 0px">
+          <% @interested_brandslips.each do |job| %>
+            <li class="well">
+              <div class="clearfix"></div>
+              <div id="post_bid_div" style="padding: 10px">
+                <table style="width: 100%">
+                  <tr>
+                    <td style="float: left;vertical-align: top">
+                      <div style="padding-top: 0px;">
+                        <li style="padding-top: 0px">
+                          <span>
+                            <a href="<%= job_detail_path(job.job_id) %>"> <%= Job.find(job.job_id).job_title %></a>
+                          </span><br/><br/>
+                          <span>
+                            <a id="brandslip_interest" style="color: white" onclick="show_delete_interested_brandslip_popup('<%= job.job_id %>')"
+                                   data-toggle="modal" href="#myModalDelete" class="btn btn-danger btn-mini">Remove from Interest</a>
+                          </span>
+                        </li>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="myModalDelete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Delete Interest Brandslip</h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this interest?
+      </div>
+      <div class="modal-footer">
+        <span id="success_msg"></span>
+        <button id="btn_delete_yes" type="button" class="btn btn-primary btn-mini">Delete</button>
+        <button type="button" id="btn_close" class="btn btn-default btn-mini" data-dismiss="modal">No</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

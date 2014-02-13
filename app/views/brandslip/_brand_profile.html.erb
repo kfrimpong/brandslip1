@@ -1,0 +1,62 @@
+<% @brands.each do |users| %>
+
+      <div class="profile panel panel-default">
+        <div class="panel-body">
+          <div style="width:30%;float: left;padding-left: 10px;">
+            <span style="font-size: 15px; color: royalblue"></span><span><%= image_tag users.image_url, :size =>"90x90" %></a></span><br/>
+          </div>
+          <div style="width: 70%;float: left">
+            <table>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 175px;">Company: </td>
+                <td><%= users.company_name %></td>
+              </tr>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 175px;">Full Name: </td>
+                <td><%= users.first_name %> <%= users.last_name %></td>
+              </tr>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 175px;vertical-align: top">Description: </td>
+                <td><%= truncate(users.description, :length => 60) %></td>
+              </tr>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 175px;">Website: </td>
+                <td><a target="_blank" href="<%= users.website %>"><%= users.website %></a></td>
+              </tr>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 175px;">Target Age Demographic: </td>
+                <td><%= users.sub_category.nil? ? "--" : Jobsubcategorymaster.find(users.sub_category).nil? ? "--" : Jobsubcategorymaster.find(users.sub_category).sub_category %></td>
+              </tr>
+              <% if !users.youtube_channel_link.nil? && !users.youtube_channel_link.empty? %>
+            <tr>
+              <td style="font-size: 15px; color: royalblue;width: 50%;">Youtube: </td>
+              <td style="width: 50%"><%= users.youtube_subscribers %></td>
+            </tr>
+          <% end %>
+          <% if !users.vine_handle.nil? && !users.vine_handle.empty? %>
+            <tr>
+              <td style="font-size: 15px; color: royalblue;width: 50%;">Vine: </td>
+              <td style="width: 50%"><%= users.vine_followers %></td>
+            </tr>
+          <% end %>
+          <% if !users.instagram_handle.nil? && !users.instagram_handle.empty? %>
+            <tr>
+              <td style="font-size: 15px; color: royalblue;width: 50%;">Instagram: </td>
+              <td style="width: 50%"><%= users.instagram_followers %></td>
+            </tr>
+          <% end %>
+          <% if !users.snapchat_handle.nil? && !users.snapchat_handle.empty? %>
+            <tr>
+              <td style="font-size: 15px; color: royalblue;width: 50%;">Snapchat: </td>
+              <td style="width: 50%"><%= users.snapchat_followers %></td>
+            </tr>
+          <% end %>
+            </table>
+          </div>
+         
+        </div>
+        <div style="padding-top: 10px;margin-left: 40%;display: inline-block">
+          <a href="<%= brands_profile_show_path(:id => users.id)%>" class="btn btn-primary btn-mini">Visit Profile</a>
+        </div>
+      </div>
+    <% end %>  

@@ -1,0 +1,33 @@
+<div style="padding-left: 400px"><h1>Editing Presenters profile</h1></div>
+  <div style="color: yellow;width: 850px;margin: 0 auto;color: #142D4F;padding-top: 160px;">
+            <p class="notice"><%= notice %></p>
+          </div>
+<div style="border-left-width: 17px;padding-left: 279px; padding-top: 107px;height: 500px;; width: 1040px; border: 3px solid #2d6987;margin-left: 136px;">
+  <%= form_for(@presenters_profile_edit) do |f| %>
+    <div class="input-group">
+      <%= f.label :first_name%>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.text_field :first_name %>
+    </div>
+    <div class="input-group">
+      <%= f.label :last_name%>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.text_field :last_name %>
+    </div>
+    <div class="input-group">
+      <%= f.label :email %>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.email_field :email %>
+    </div>
+    <div class="input-group">
+      <%= f.label :company_name %>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.text_field :company_name %>
+    </div>
+    <div class="input-group">
+      <%= f.label :phone_no %>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.text_field :phone_no %>
+    </div>
+  <%= f.submit %>
+  <% end %>
+
+</div>
+
+
+

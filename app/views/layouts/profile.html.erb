@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="https://js.balancedpayments.com/v1/balanced.js"></script>
+	<title>BrandSlip</title>
+        <meta charset="utf-8">
+	<!-- viewport --> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--  including stylesheets-->
+	<%= stylesheet_link_tag "application", "profile", "d_green", "bootstrap-responsive", "bootstrap-responsive.min", "bootstrap", :media => "all" %>
+        <link rel="icon" type="image/gif" href="/assets/favicon.png">
+	<!-- google fonts-->
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+ <script type="text/javascript">
+    balanced.init('/v1/marketplaces/TEST-MP1y8mqAL3IIHgZ6u2lr9vS2');
+</script>
+</head>
+<body>
+
+<%= yield %>
+
+<!-- including js -->
+<script type="text/javascript" src="/assets/application.js"></script>
+<script type="text/javascript" src="/assets/jquery.js"></script>
+<script type="text/javascript" src="/assets/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="/assets/gmap3.min.js"></script>
+<script type="text/javascript" src="/assets/additional-scripts.min.js"></script>
+<script type="text/javascript" src="/assets/profile_custom.js"></script>
+<script type="text/javascript" src="/assets/profile.js"></script>
+<script type="text/javascript" src="/assets/jquery.raty.min.js"></script>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>  
+</body>
+</html>

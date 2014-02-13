@@ -1,0 +1,112 @@
+<span style="font-size: 35px;display: inline-block;margin-bottom: 25px;">Edit Payment Information</span><br/>
+<% if current_user.user_type == 2 %>
+  <div>
+    Influencer Payment Information
+  </div>
+  <h3> Bank Account on File </h3>
+  <% if @bank_accounts %>
+    <% @bank_accounts.each do |ba| %>
+      <div>Bank Name: <%= ba.bank_name %>, Account Number: <%= ba.account_number %></div>
+    <% end %>
+  <% else %>
+    <h4>None, please add Bank Account</h4>
+  <% end %>
+
+  <%if !current_user.balanced_customer_uri.nil?%>
+  <%= link_to "Remove account detail",remove_account_user_path,:style=>"float: right; margin-top: -42px;",:class=>"btn"%>
+  <%end%>
+
+  <%= form_tag({:controller => 'payments', :action => 'add_bank_account', :method => 'post'},{:id => 'customer-bank-account'}) do %>
+    <div class="panel panel-primary" >
+      <div class="panel-heading">
+        <h3 class="panel-title">Add your bank account</h3>
+      </div>
+      <div class="panel-body">
+        <!-- <div class="input-group">
+          <span class="input-group-addon">Name on Bank Account</span>
+          <%= text_field_tag(:name, nil,  :class => 'form-control', :id => 'ba-name', :autofocus => "autofocus") %>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Account Number</span>
+          <%= text_field_tag(:account_number, nil, :class => 'form-control', :id => 'ba-an') %>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Routing Number</span>
+          <%= text_field_tag(:bank_code, nil, :class => 'form-control', :id => 'ba-rn') %>
+        </div>
+        <span id="bank-code-result"></span> -->
+        <fieldset class="control-group">
+          <%= label_tag(:name, "Name on Bank Account") %>
+          <div class="controls">
+            <%= text_field_tag(:name, nil,  :class => 'span5', :id => 'ba-name', :autofocus => "autofocus") %>
+          </div>
+          <%= label_tag(:account_number, 'Account Number', :class => 'control-label') %>
+          <div class="controls">
+            <%= text_field_tag(:account_number, nil, :class => 'span5', :id => 'ba-an') %>
+          </div>
+          <%= label_tag(:bank_code, 'Routing Number') %>
+          <div class="controls">
+            <%= text_field_tag(:bank_code, nil, :class => 'span5', :id => 'ba-rn') %>
+          </div>
+        </fieldset>
+        <div class="control-group">
+          
+          <span id="bank-code-result"></span>
+        </div>
+
+        <div class="actions" style="margin: 20px auto">
+          <%= submit_tag("Add Bank Account", :class => 'btn btn-primary', :id => 'add_bank_account') %>
+        </div>
+        <a href="https://www.balancedpayments.com"><img src="https://balancedpowered.s3.amazonaws.com/secured-1-1.png" alt="Secured by Balanced"></a>
+      </div>
+    </div>
+    
+  <% end %>
+<% elsif current_user.user_type == 1 %>
+  <h2>
+    Brand Payment Information
+  </h2>
+  <h3> Cards on File </h3>
+  <% if @cards %>
+    <% @cards.each do |card| %>
+      <div>Brand: <%= card.brand %>, Last 4: <%= card.last_four %></div>
+    <% end %>
+  <% else %>
+    <h4>None, please add credit card</h4>
+  <% end %>
+
+  <%if !current_user.balanced_customer_uri.nil?%>
+  <%= link_to "Remove account detail",remove_account_user_path,:style=>"float: right; margin-right: 115px;",:class=>"btn"%>
+  <%end%>
+  <div class="span6 offset1" style="margin-top: 5px;">
+    <div class="panel panel-primary" style="margin-left: -128px;">
+      <div class="panel-heading">
+        <h3 class="panel-title">Add your card</h3>
+      </div>
+      <div class="panel-body">
+        <%= form_tag({:controller => 'payments', :action => 'add_card', :method => 'post'},{:id => 'customer-card'}) do %>
+          <fieldset class="control-group">
+            <%= label_tag(:name, "Name on Card") %>
+            <div class="controls">
+              <%= text_field_tag(:name, nil,  :class => 'span5', :id => 'name', :autofocus => "autofocus") %>
+            </div>
+            <%= label_tag(:card_number, "Credit Card Number") %>
+            <div class="controls">
+              <%= text_field_tag(:card_number, nil,  :class => 'span5', :id => 'cc-number', :autofocus => "autofocus") %>
+            </div>
+          </fieldset>
+          <div class="control-group">
+            <%= label_tag(:expiration_month, 'Expiration Date') %>
+            <%= select_tag(:expiration_month, options_for_select(1.upto(12).map{ |num| [num,num] }), :class => 'span1', :id => 'cc-em') %>
+            <%= select_tag(:expiration_year, options_for_select(2012.upto(2022).map{ |num| [num,num] }), :class => 'span1', :id => 'cc-ey') %>
+          </div>
+          <br />
+          <div class="actions" style="margin: 20px auto">
+            <%= submit_tag("Add Card", :class => 'btn btn-primary', :id => 'add_card') %>
+          </div>
+        <% end %>
+        <a href="https://www.balancedpayments.com"><img src="https://balancedpowered.s3.amazonaws.com/secured-1-1.png" alt="Secured by Balanced"></a>
+      </div>
+    </div>
+  </div>
+<% end %>

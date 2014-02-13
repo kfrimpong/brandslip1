@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row" style="padding-left: 150px">
+    <h2 class="formhead conf" style="text-align: center;padding-right: 160px;">
+      <% if params[:type] == "public_speaking" %>
+        Public Speaking BrandSlip Suggestion
+      <% else %>
+        Online BrandSlip Suggestion (Youtube, Vine, Instagram)
+      <% end %>
+    </h2>
+    <br>    
+    <%= render 'form', :action => 'edit' %>
+  </div>  
+</div>

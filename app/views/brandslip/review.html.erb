@@ -1,0 +1,70 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+        
+    $.fn.raty.defaults.path = '/assets/ratings';
+    $('#star').raty({      
+      precision: true,
+      score: function() {
+        return $(this).attr('data-score');
+      }
+    }); 
+    
+  });
+    
+</script>    
+
+<span style="padding-top: 34px;padding-left: 67%;padding-bottom: 10px;display: inline-block;">
+  <%= link_to 'Back to BrandSlip', home_path, :class => 'btn btn-primary' %> 
+</span>
+<div style="float: left;padding-left: 20%;margin-bottom: 10px" class="col-9"><b><span id="result_found">
+<%= UserRating.where(:to_user => current_user.id).length %></span></b> results found.</div>
+
+<div style="float: left; margin-left: 20%" class="span8 pull-left">
+  <div class="row-fluid">
+    <!-- bids div -->
+    <div id="" class="pull-left span12">
+      <div class="well well-white">
+        <span style="padding: 10px;" class="msg-title">
+         Reviews
+        </span>
+        <ul class="unstyled" style="padding-left: 0px">
+          <% UserRating.where(:to_user => current_user.id).each do |review| %>
+            <li class="well">
+              <div class="clearfix"></div>
+              <div id="post_bid_div" style="padding: 10px">
+                <table style="width: 100%">
+                  <tr>
+                    <td style="float: left;vertical-align: top">
+                      <div style="padding-top: 0px;">
+                        <li style="padding-top: 0px">
+                          <span>
+                            <% user = User.find(review.from_user) %>
+                            <% if(!review.from_user.nil? && !user.nil?) %>
+                              <% if user.user_type == 1 %>
+                                <a target="_blank" href="<%= brands_profile_show_path(:id => review.from_user) %>"><%= user.first_name %> <%= user.last_name %></a>
+                              <% elsif user.user_type == 2 %>
+                                <a target="_blank" href="<%= presenters_profile_show_path(:id => review.from_user) %>"><%= user.first_name %> <%= user.last_name %></a>
+                              <% end %>
+
+                            <% else %>
+                              --
+                            <% end %>
+                            's Review: <%= review.review %>
+                          </span>
+                        </li>
+                        <li style="padding-top: 10px">
+                          <span>Rating: <%= number_with_precision(@avg_rating, :precision => 1) %></span>
+                          <span style="padding-top: 0px" id="star" data-score="<%=  @avg_rating %>"></span>
+                        </li>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="navbar navbar-inverse" style="margin-bottom: 0px">
+  <div class="container">
+    <a class="navbar-brand brand" style="color:yellow" href="<%= home_path %>">BrandSlip</a>
+    <div class="nav-collapse collapse navbar-inverse-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="<%= new_user_registration_path %>">Signup</a></li>
+        <li class="active"><a href="<%= new_user_session_path %>">Signin</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="<%= new_contact_u_path %>">Contact Us</a></li>
+    </div> 
+  </div>
+</div>
+
+<div>
+  <div class="signuplogo" style="padding-top: 50px;padding-bottom: 25px;text-align: center;">Brandslip</div>
+  <div class="error" style="padding-left: 45%;width: 100%;text-align: left;"><%= notice %></div>
+  <div style="padding-left: 35%">
+    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="user_email" name="user[email]" type="email"  class="form-control input-large" placeholder="Email Username">
+      </div>        
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="user_password" name="user[password]" size="30" type="password"  class="form-control input-large" placeholder="Password">
+      </div>  
+
+      <div style="margin-top: 15px">
+        <input name="commit" style="width: 53%" class="btn btn-primary btn-large" type="submit" value="Log in">
+      </div>
+    <% end %>
+    <div style="text-align: center;width: 53%;margin-top: 10px;">
+      <span>Don't have an account?</span> <a href="/users/sign_up">Sign up</a>
+    </div>
+    <div style="text-align: center;width: 53%;margin-top: 10px;">
+      <a href="#">Forgot your password?</a>
+    </div>
+  </div>  
+</div>

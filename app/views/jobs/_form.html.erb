@@ -1,0 +1,241 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    <% if action == 'edit' && @job.job_type == 1 %>
+        var state = $("#job_state").val();
+        if(state != ""){
+                $.ajax({
+                    url: "/jobs/get_cities",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "state": state
+                    },
+                    beforeSend: function() {
+                    },
+                    complete: function() {
+                    },
+                    success: function(data) {
+                        $("#job_city").find("option:gt(0)").remove();
+                        for (var index = 0; index < data['matched_cities'].length; index++) {
+
+                            $("#job_city").append($("<option/>", {
+                                                        value: data['matched_cities'][index]['city'],
+                                                        text: data['matched_cities'][index]['city']
+                                                    }));
+                        } 
+                        $("#job_city").val('<%= @job.city %>');
+                    }
+                });          
+        }        
+        
+    <% end %>
+    
+    $("li#post_job").addClass("active");
+    
+    $("form.job_form").submit(function(){
+      var submit = true;
+      var empty_boxes = [];
+      $(".job_form input[type='text']:not('.not_required')").each(function(){
+        if($(this).val() == ""){
+          empty_boxes.push($(this).closest('div.field').find('b').text());
+          submit = false;
+        }
+      });
+          
+      $(".job_form textarea").each(function(){
+        if($(this).val() == ""){
+          empty_boxes.push("Description");
+          submit = false;
+        }
+      });
+          
+      $(".job_form select").each(function(){
+        if($(this).val() == ""){
+          empty_boxes.push($(this).closest('div.field').find('b').text());
+          submit = false;
+        }
+      });
+      
+      if(submit == false){
+        $("#btn_job_err_msg").click();
+        $("div#myModalJobErrorMsg").find(".modal-body").text("Please enter " + empty_boxes.join(', ') +" fields...");
+        return false;
+      }else{
+        if(!$(".chk_terms_and_cond").is(":checked")){
+            empty_boxes.push("Accept terms and conditions.");
+            submit = false;
+            $("#btn_job_err_msg").click();
+            $("div#myModalJobErrorMsg").find(".modal-body").text("Please " + empty_boxes.join(', '));            
+            return false;
+        }
+      }
+    });
+  });
+</script> 
+
+<%= form_for(@job, :html => {:class => 'job_form'}) do |f| %>
+  <%= f.hidden_field :job_user_id, :value=> current_user.id  %>
+  <% if @job.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@job.errors.count, "error") %> prohibited this BrandSlip from being saved:</h2>
+      <ul>
+        <% @job.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if params[:type] == "public_speaking" %>
+    <%= f.hidden_field :job_type, :value=> 1  %>
+  <% else %>
+    <%= f.hidden_field :job_type, :value=> 2  %>
+  <% end %>
+
+  <div style="width: 100%">
+    <div style="float: left;width: 50%; padding-right: 190px;">
+      <div class="field">
+        <b><%= "BrandSlip Title" %></b><br />
+        <%= f.text_field :job_title, :class => 'text_field', :size =>30, :maxlength => 50 %>
+      </div>
+      <br/>
+      <div class="field">
+        <b><%=  "BrandSlip Description" %></b><br />
+        <%= f.text_area :job_description, :id => 'text_field', :rows => '9', :cols => '40', :style => "width:340px" %>
+      </div>
+      <br/>
+      <div class="field">
+        <b><%= "Sector" %></b><br />
+        <%#= f.select(:job_category,
+          Jobcategorymaster.all.collect{|s| [s.category, s.id]},
+
+          {:include_blank => '--Select Interests--'}, :class => "selectpicker" ) %>
+
+  
+        
+        <%=f.select :job_category, [['Health/Fitness', 12], ['Fashion/Apparel', 13], ['Comedy', 16], ['Other', 17]],{:include_blank => "Select Sector"}, :class => "selectpicker"%>
+      </div>
+      <br/>
+      <% if params[:type] == "public_speaking" %>
+        <div class="field">
+          <b><%= "Proof Selector"  %></b><br />
+            <%= f.select :proof_selector, 
+                  ['Have the crowd tweet during your presentation or use a hashtag to promote a brand', 
+                   'Provide giveaways supplied by the brand', 'Give out promotional materials supplied by brand',
+                   'If you have access to attendees emails, email them information about the brand', 
+                   'Other'], 
+                 {:include_blank => "Select Selector"}, :class => "selectpicker" %>
+        </div>   
+      <% else %>
+        <div class="field">
+          <b><%= "Online Media Source"  %></b><br />
+            <%= f.select :online_media_source, ['Youtube', 'Instagram', 'Vine', 'Snapchat'], 
+                {:include_blank => "Select Online Media Source"}, :class => "selectpicker" %>
+        </div>         
+      <% end %>
+      <br/>
+      <div class="field">
+        <b><%= "Age Demographic Criteria" %></b><br />
+        <%= f.select(:job_sub_category,
+          Jobsubcategorymaster.all.collect{|s| [s.sub_category, s.id]},
+
+          {:include_blank => '--Select Criteria--'}, :class => "selectpicker" ) %>    
+      </div> 
+      <br/>
+    </div>
+
+    <div style="float: right;width: 50%">  
+      <div class="field">
+        <b><%= "BrandSlip Starting Bid" %></b><br />
+        <div>
+          <div style="float: left;width: 11px;font-size: 17px;padding-top: 6px;">$</div>
+          <div style="float: left;width: 300px"><%= f.text_field :job_price_fixed_type, :class => 'text_field', :size =>25, :placeholder => "45" %></div>
+        </div>
+      </div>
+      <br/>      
+      <br/>      
+      <br/>      
+      <div class="field">
+        <b><%= "BrandSlip Valid For (No. of days)" %></b><br />
+        <%= f.select :job_valid_for, (1..30).step(1).to_a, {:include_blank => "Select Days"}, :class => "selectpicker" %>
+      </div>
+      <br/>
+      <div class="field">
+        <b><%= "BrandSlip Date" %></b><br />
+        <%= f.date_select :job_start_date, :class => 'text_field', :size =>30 %>
+      </div>
+      <br/>
+      <% if params[:type] == "public_speaking" %>
+        <div class="field">
+          <b><%= "Crowd Size" %></b><br />
+          <%= f.select :crowd_size, ['Less than 20 people', '20-50 people', '50-80 people', 
+                                     '80-100 people', 'Greater than 100 people'], 
+                          {:include_blank => "Select Size"}, :class => "selectpicker" %>
+        </div>
+      <% else %>
+        <div class="field">
+          <b><%= "Followers/Subscribers" %></b><br />
+          <%= f.select :followers_subscribers, ['Less than 50,000', '50,000-100,000', 
+                                                 '100,000-500,000', '500,000-1,000,000', '1,000,000+'], 
+                         {:include_blank => "Select Size"}, :class => "selectpicker" %>
+        </div>      
+      <% end %>
+      <br/>
+      <div class="field">
+        <b><%= "Time" %></b><br />
+        <%= f.text_field :time, :class => 'text_field', :size =>30 %>
+      </div>
+      <br/>
+      <% if params[:type] == "public_speaking" %>
+        <div class="field">
+          <b><%= "State" %></b><br />
+          <%= f.select(:state,
+            State.all.collect{|s| [s.state, s.state]},
+
+            {:include_blank => '--Select State--'}, :class => "selectpicker", :onchange => "populate_cities(this, 'job_city')" ) %>    
+        </div> 
+        <br/>
+        <div class="field">
+          <b><%= "City" %></b><br />
+          <%= f.select(:city, [],
+            {:include_blank => '--Select City--'}, :class => "selectpicker" ) %>    
+        </div> 
+        <br/>
+      <% end %>
+    </div>
+    <div class="actions" style="padding-bottom: 30px;padding-top: 30px; padding-left: 15%;display: inline-block">
+      <div style="padding-bottom: 15px">
+        <input type="checkbox" class="chk_terms_and_cond" name="checkbox"/>&nbsp;
+        By clicking Create BrandSlip you will agree to 
+        <a style="text-decoration: underline" href="<%= terms_conditions_path %>" target=" _blank" >
+          Terms/Privacy </a>and
+        <a style="text-decoration: underline" href="<%= policies_path %>" target=" _blank" >
+          BrandSlip Marketplace Policies.</a>
+      </div>
+    </div>
+    <div class="actions" style="padding-bottom: 30px;padding-left: 30%">
+      <%= f.submit "Create BrandSlip", :class => 'btn btn-mini btn-primary', :id => 'sub_job', :style => "color:white" %>
+      <%= link_to 'Home', home_path, :class => 'btn btn-mini btn-primary', :style => "color:white;font-size: 13px;"  %>
+    </div>
+  <% end %>
+</div>
+
+<a style="display: none" id="btn_job_err_msg" data-toggle="modal" href="#myModalJobErrorMsg"></a>
+
+<!-- Modal -->
+<div class="modal fade" id="myModalJobErrorMsg">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Error Message:</h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,104 @@
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $("li#my_brandslip").addClass("active");
+    $("form#new_user_job_proposal").submit(function(){
+      var submit = true;
+      var empty_boxes = [];
+      if($("#pro_details").val() == ""){
+        empty_boxes.push("Proposal Description");
+        submit = false;
+      }
+      if($("#user_job_proposal_proposal_cost").val() == ""){
+        empty_boxes.push("Proposal Cost");
+        submit = false;
+      }
+      
+      if(submit == false){
+        $("#btn_job_err_msg").click();
+        $("div#myModalUserjobErrorMsg").find(".modal-body").text("Please enter " + empty_boxes.join(', ') +" fields...");
+        return false;
+      }else{
+        if(!$(".chk_terms_and_cond").is(":checked")) {
+          empty_boxes.push("Accept terms and conditions.");
+          submit = false;
+          $("#btn_job_err_msg").click();
+          $("div#myModalUserjobErrorMsg").find(".modal-body").text("Please " + empty_boxes.join(', '));          
+          return false;
+        }
+      }
+    });
+  });
+</script> 
+<div class="container" style="padding-top: 20px;">
+  <div class="row">
+    <div class="col-lg-9">
+      <div style="width: 100%;">
+        <% @job_details.each do |job| %>
+          <div>
+           
+            <span style="padding-left: 1050px; display: inline-block;margin-right: 100px;"> 
+               <% if job.city.nil? %>
+              <%= link_to 'Back to Search', search_job_path+"?job_type=online", :class => 'btn btn-primary' %> 
+            
+            <%else%>
+             <%= link_to 'Back to Search', search_job_path+"?job_type=public_speaking", :class => 'btn btn-primary' %> 
+            <%end%>
+            </span>
+            <h1 style="font-family: Georgia,Times New Roman;font-weight: normal;color: #333!important;font-size: 32px;margin-bottom: 8px;">
+              <%= job.job_title %>
+            </h1>
+          </div>
+          <div style="height: 20px;width: 100%">
+            <span style="float: left;color: #5d656e;font-size: 14px;">
+              <%= job.job_category.nil? ? "--" : Jobcategorymaster.find(job.job_category).category %> > <%= job.job_sub_category.nil? ? "--" : Jobsubcategorymaster.find(job.job_sub_category).sub_category %>
+            </span>
+          </div>
+          <div class="praposal-info" style="width: 100%;border: 3px solid dimgrey;display: inline-table">
+            <div style="width: 100%;">
+              <div style="width: 35%;float: left;padding-left: 10px;">
+                <% if job.job_user_id.nil? %>
+                  <span style="font-size: 15px; color: royalblue">Name: </span> --<br/>
+                <% else %>
+                  <% if(User.find(job.job_user_id).nil?) %>
+                    <span style="font-size: 15px; color: royalblue">Name: </span> --<br/>
+                  <% else %>
+                    <span style="font-size: 15px; color: royalblue">Name: </span> <a target="_blank" href="<%= presenters_profile_show_path(:id => job.job_user_id)%>">
+<%= User.find(job.job_user_id).first_name %>&nbsp;<%= User.find(job.job_user_id).last_name %></a><br/>
+                  <% end %>
+                <% end %>
+                <span style="font-size: 15px; color: royalblue">Brandslip Title: </span> <%= job.job_title %><br/>
+                <span style="font-size: 15px; color: royalblue">Interest: </span> <%= job.job_category.nil? ? "--" : Jobcategorymaster.find(job.job_category).nil? ? "--" : Jobcategorymaster.find(job.job_category).category %><br/>
+                <span style="font-size: 15px; color: royalblue">Demographic Criteria: </span> <%= job.job_sub_category.nil? ? "--" : Jobsubcategorymaster.find(job.job_sub_category).nil? ? "--" : Jobsubcategorymaster.find(job.job_sub_category).sub_category %><br/>
+                <span style="font-size: 15px; color: royalblue">BrandSlip Date: </span><%= job.job_start_date.strftime("%a, %b %d, %Y") %><br/>
+                <span style="font-size: 15px; color: royalblue">Posted: </span><%= job.created_at.strftime("%a, %b %d, %Y") %><br/>
+                <% if job.job_type == 1 %>
+                  <span style="font-size: 15px; color: royalblue">city: </span><%= job.city %></span><br/>
+                <% end %>
+              </div>
+              <div style="width: 65%;float: right">
+                <% if job.job_type == 2 %>
+                  <span style="font-size: 15px; color: royalblue">Online Media Source: </span><%= job.online_media_source %></span><br/>
+                  <span style="font-size: 15px; color: royalblue">Followers/Subscribers: </span><%= job.followers_subscribers %></span><br/>
+                <% else %>
+                  <span style="font-size: 15px; color: royalblue">CrowdSize: </span><%= job.crowd_size %></span><br/>
+                  <span style="font-size: 15px; color: royalblue">Proof Selector: </span><%= job.proof_selector %></span><br/>
+                <% end %>
+                <span style="font-size: 15px; color: royalblue">Time Left: </span> <%= job.job_valid_for %> days<br/>
+                <span style="font-size: 15px; color: royalblue">Time: </span><%= job.time.nil? ? "--" : job.time.strftime("%H:%M") %></span><br/>
+                <span style="font-size: 15px; color: royalblue">BrandSlip Starting Bid: </span>$<%= job.job_price_fixed_type %><br/>
+                <% if job.job_type == 1 %>
+                  <span style="font-size: 15px; color: royalblue">State: </span><%= job.state %></span><br/>
+                <% end %>
+                <span style="font-size: 15px; color: royalblue">Description:  </span><%= job.job_description %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-lg-9" id="post_bid_detail_div" style="padding-bottom: 30px; border: 3px solid dimgrey;height: auto;margin-top: 50px;background-color: white;margin-bottom: 20px">
+        <%=  render "user_job_proposals/form" %>
+    </div>
+   
+  </div>
+</div>  

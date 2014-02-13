@@ -1,0 +1,256 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#find_work").addClass("active");
+  });
+</script> 
+<div class="container-fluit" id="search-bar">
+  <div class="row" style="padding-bottom: 20px;">
+    <div class="col-12" style="text-align: center;">
+      <form action="/search_job" class="navbar-form">
+        <%= hidden_field_tag "job_user_id", current_user.id %>
+        <%= hidden_field_tag "job_type", params[:job_type] %> 
+        <input type="text" name="title" class="form-control" placeholder="Search BrandSlip..." style="width: 550px;" />
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div id="search-page" class="container" style="padding-top: 20px">
+  <div class="row">
+    <div class="col-lg-3 search-fields">
+      <div>
+        <ul class="well" id="category_filter"  style="list-style-type: none;border: 2px solid dimgrey;padding-left: 3px;">
+          <li>
+            <label class="checkbox" for="all_categories" style="color: #50852C;font-weight: bold;">
+              <input id="all_categories" class="user_group_id" class="chk_all_category" data-val="-1" name="user_group_id" type="checkbox" value="1" />
+              <% if(params[:job_type] == "public_speaking") %>
+                All Sectors (<%= Job.where('job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now()').count() %>)
+              <% elsif(params[:job_type] == "online") %>
+                All Sectors (<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now()').count() %>)
+              <% end %>
+            </label>            
+          </li>
+          <% Jobcategorymaster.all.each do |category| %>
+            <li>
+              <% if @search_job_category.include? category.category %>
+                <label class="checkbox" for="category<%= category.id %>">
+                  <input id="category<%= category.id %>" class="user_group_id" name="user_group_id" data-val="<%= category.id %>" type="checkbox" value="1" />
+                <% if(params[:job_type] == "public_speaking") %>
+                  <a href="#"><%= category.category %> (<%= Job.where("job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and Job_category=#{category.id}").count() %>)</a></label>
+                <% elsif(params[:job_type] == "online") %>
+                  <a href="#"><%= category.category %> (<%= Job.where("job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and Job_category=#{category.id}").count() %>)</a></label>
+                <% end %>
+              <%end%>  
+            </li>
+          <% end %>
+        </ul>
+        <% if params[:job_type] == "online" %>
+          <ul class="well" id="media_source_filter" style="list-style-type: none;border: 2px solid dimgrey;padding-left: 3px;">
+            <li>
+              <span style="color: #50852C;font-weight: bold;">Online Media Source</span>
+            </li>        
+            <li>
+              <label class="checkbox" for="source1">
+                <input id="source1" class="user_group_id" name="user_group_id" data-val="Youtube" type="checkbox" value="1" />
+              <a href="#">Youtube (<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and online_media_source="Youtube"').count() %>)</a></label>
+            </li>          
+            <li>
+              <label class="checkbox" for="source2">
+                <input id="source2" class="user_group_id" name="user_group_id" data-val="Instagram" type="checkbox" value="1" />
+              <a href="#">Instagram (<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and online_media_source="Instagram"').count() %>)</a></label>
+            </li>          
+            <li>
+              <label class="checkbox" for="source3">
+                <input id="source3" class="user_group_id" name="user_group_id" data-val="Vine" type="checkbox" value="1" />
+              <a href="#">Vine (<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and online_media_source="Vine"').count() %>)</a></label>
+            </li>          
+            <li>
+              <label class="checkbox" for="source4">
+                <input id="source4" class="user_group_id" name="user_group_id" data-val="Snapchat" type="checkbox" value="1" />
+              <a href="#">Snapchat (<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and online_media_source="Snapchat"').count() %>)</a></label>
+            </li>          
+          </ul>
+        <% end %>        
+        <% if params[:job_type] == "online" %>
+        <ul class="well" id="follow_sub_filter" style="list-style-type: none;border: 2px solid dimgrey;padding-left: 3px;">
+          <li>
+            <span style="color: #50852C;font-weight: bold;">Number of Followers/Subscribers</span>
+          </li>
+            <li>
+              <label class="checkbox" for="follower1">
+                <input id="follower1" class="user_group_id" data-val="Less than 50,000" type="checkbox" value="1" />
+               <a href="#">Less than 50,000(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="less than 50,000"').count() %>)</a></label>
+          
+            </li>
+            <li>
+
+              <label class="checkbox" for="follower2">
+                <input id="follower2" class="user_group_id" data-val="50,000-100,000" type="checkbox" value="1" />
+               <a href="#">50,000 - 100,000(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="50,000-100,000"').count() %>)</a></label>
+            </li>
+            <li>
+              <label class="checkbox" for="follower3">
+                <input id="follower3" class="user_group_id" data-val="100,000-500,000" type="checkbox" value="1" />
+               <a href="#">100,000 - 500,000 (<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="100,000-500,000"').count() %>)</a></label>
+            </li>
+            <li>
+              <label class="checkbox" for="follower4">
+                <input id="follower4" class="user_group_id" data-val="500,000-1,000,000" type="checkbox" value="1" />
+               <a href="#">500,000 - 1,000,000(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="500,000-1,000,000"').count() %>)</a></label>
+            </li>
+            <li>
+              
+              <label class="checkbox" for="follower5">
+                <input id="follower5" class="user_group_id" data-val="1,000,000+" type="checkbox" value="1" />
+               <a href="#">1,000,000 +(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="1,000,000+"').count() %>)</a></label>
+            </li>
+        </ul>             
+        <% else %>
+        <ul class="well" id="crowd_size_filter" style="list-style-type: none;border: 2px solid dimgrey;padding-left: 3px;">
+           <li>
+            <label class="checkbox" for="all_sizes" style="color: #50852C;font-weight: bold;">
+              <input id="all_sizes" data-val="-1" class="chk_all_crowd_size" name="user_group_id" type="checkbox" value="1" />
+              Crowd Size </label>
+          </li>
+          <li>
+            <label class="checkbox" for="size1">
+              <input id="size1" class="user_group_id" class="chk_crowd_size" name="user_group_id" data-val="Less than 20 people" type="checkbox" value="1" />
+            <a href="#">Less than 20 people (<%= Job.where("job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and crowd_size='Less than 20 people'").count() %>)</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="size2">
+              <input id="size2" class="user_group_id" class="chk_crowd_size" name="user_group_id" data-val="20-50 people" type="checkbox" value="1" />
+            <a href="#">20-50 people (<%= Job.where("job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and crowd_size='20-50 people'").count() %>)</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="size3">
+              <input id="size3" class="user_group_id" class="chk_crowd_size" name="user_group_id" data-val="50-80 people" type="checkbox" value="1" />
+            <a href="#">50-80 people (<%= Job.where("job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and crowd_size='50-80 people'").count() %>)</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="size4">
+              <input id="size4" class="user_group_id" class="chk_crowd_size" name="user_group_id" data-val="80-100 people" type="checkbox" value="1" />
+            <a href="#">80-100 people (<%= Job.where("job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and crowd_size='80-100 people'").count() %>)</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="size5">
+              <input id="size5" class="user_group_id" class="chk_crowd_size" name="user_group_id" data-val="Greater than 100 people" type="checkbox" value="1" />
+            <a href="#">Greater than 100 people (<%= Job.where("job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and crowd_size='Greater than 100 people'").count() %>)</a></label>
+          </li>
+        </ul>
+        <% end %>       
+         <ul class="well" id="money_filter" style="list-style-type: none;border: 2px solid dimgrey;padding-left: 3px;">
+            <% if(params[:job_type] == "public_speaking") %>
+              <% money_search_job_type = 'job_type=1' %>
+            <% elsif(params[:job_type] == "online") %>
+              <% money_search_job_type = 'job_type=2' %>
+            <% end %>            
+           <li>
+            <label class="checkbox" for="all_ranges" style="color: #50852C;font-weight: bold;">
+              <input id="all_ranges" class="user_group_id" data-val="-1" class="chk_all_category" name="user_group_id" type="checkbox" value="1" />
+             All Maximum Bid Categories </label>
+          </li>
+          <li>
+            <label class="checkbox" for="range1">
+              <input id="range1" class="user_group_id" data-val="0-24" name="user_group_id" type="checkbox" value="1" />
+            <a href="#">Less than $250 (<%= Job.where("#{money_search_job_type} and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and job_price_fixed_type>=0 and  job_price_fixed_type<=250").count() %>)</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="range2">
+              <input id="range2" class="user_group_id" data-val="25-50" name="user_group_id" type="checkbox" value="1" />
+            <a href="#">$25­0-$500 (<%= Job.where("#{money_search_job_type} and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and job_price_fixed_type>=250 and  job_price_fixed_type<=500").count() %>)</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="range3">
+              <input id="range3" class="user_group_id" data-val="51-100" name="user_group_id" type="checkbox" value="1" />
+            <a href="#">$500-­$750 (<%= Job.where("#{money_search_job_type} and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and job_price_fixed_type>=500 and  job_price_fixed_type<=750").count() %>)</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="range4">
+              <input id="range4" class="user_group_id" data-val="101-150" name="user_group_id" type="checkbox" value="1" />
+            <a href="#">$750-­$1000 (<%= Job.where("#{money_search_job_type} and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and job_price_fixed_type>=750 and  job_price_fixed_type<=1000").count() %>)</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="range5">
+              <input id="range5" class="user_group_id" data-val="151-100000" name="user_group_id" type="checkbox" value="1" />
+            <a href="#">$1001 + (<%= Job.where("#{money_search_job_type} and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and job_price_fixed_type>=1001 and  job_price_fixed_type<=100000").count() %>)</a></label>
+
+          </li>
+        </ul>
+        
+        <ul class="well" id="sub_category_filter" style="list-style-type: none;border: 2px solid dimgrey;padding-left: 3px;">
+          <li>
+            <label class="checkbox" for="all_subcategories" style="color: #50852C;font-weight: bold;">
+              <input id="all_subcategories" class="user_group_id" class="chk_all_category" data-val="-1" name="user_group_id" type="checkbox" value="1" />
+              <% if(params[:job_type] == "public_speaking") %>
+                Age demographic Categories (<%= Job.where('job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now()').count() %>)
+              <% elsif(params[:job_type] == "online") %>
+                Age demographic Categories (<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now()').count() %>)
+              <% end %>
+            </label>            
+          </li>
+          <% Jobsubcategorymaster.all.each do |sub_category| %>
+            <li>
+              <label class="checkbox" for="subcategory<%= sub_category.id %>">
+                <input id="subcategory<%= sub_category.id %>" class="user_group_id" name="user_group_id" data-val="<%= sub_category.id %>" type="checkbox" value="1" />
+              <% if(params[:job_type] == "public_speaking") %>
+                 <a href="#"><%= sub_category.sub_category %> (<%= Job.where("job_type=1 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and Job_sub_category=#{sub_category.id}").count() %>)</a>
+              <% elsif(params[:job_type] == "online") %>
+                 <a href="#"><%= sub_category.sub_category %> (<%= Job.where("job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and Job_sub_category=#{sub_category.id}").count() %>)</a>
+              <% end %>
+              </label>
+            </li>
+          <% end %>
+        </ul>
+        
+        <ul class="well" id="valid_for_filter" style="list-style-type: none;border: 2px solid dimgrey;padding-left: 3px;">
+          <li>
+            <span style="color: #50852C;">Valid For </span>
+          </li>
+          <li>
+            <label class="checkbox" for="valid1">
+              <input id="valid1" id="chk_valid_for" data-val="newly_posted" class="chk_newly_posted" name="user_group_id" type="checkbox" value="1" />
+              <a href="#">Newly Posted</a></label>
+          </li>
+          <li>
+            <label class="checkbox" for="valid2">
+              <input id="valid2" id="chk_valid_for" data-val="due_soon" class="chk_due_soon" name="user_group_id" type="checkbox" value="1" />
+              <a href="#">Due Soon</a></label>
+          </li>
+        </ul>
+        <ul class="well">
+          <li>
+            <span style="color: #50852C;">Specific Location</span>
+          </li>
+          <li>
+              <%= select(:job, :state,
+          State.all.collect{|s| [s.state, s.state]},
+
+          {:include_blank => '--Select State--'}, :class => "selectpicker", :style => 'width:100%', :onchange => "populate_cities(this, 'job_city')"  ) %> 
+          </li>
+          <li>
+              <%= select(:job, :city,[],
+          {:include_blank => '--Select City--'}, :class => "selectpicker", :style => 'width:100%' ) %> 
+          </li>
+          <li>
+            <input type="button" class="btn btn-mini btn-primary" style="width:100%" value="Search" onclick="search_by_location()"/>
+          </li>
+        </ul>
+      </div>  
+    </div>
+    <div class="col-9">
+      <div><i><b><span id="result_found"><%= @jobs.length %></span></b> results found.</i></div>
+      <div id="all_jobs">
+        <%= render 'all_jobs' %>
+      </div>
+      <% if @jobs.length>0 %>
+      <%= will_paginate @jobs %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<style>
+label.checkbox {
+    font-weight: normal !important;
+}
+</style>

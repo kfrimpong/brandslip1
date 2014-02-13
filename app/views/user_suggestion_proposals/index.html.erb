@@ -1,0 +1,29 @@
+<h1>Listing user_suggestion_proposals</h1>
+
+<table>
+  <tr>
+    <th>Proposal details</th>
+    <th>Proposal cost</th>
+    <th>Suggestion</th>
+    <th>User</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @user_suggestion_proposals.each do |user_suggestion_proposal| %>
+  <tr>
+    <td><%= user_suggestion_proposal.proposal_details %></td>
+    <td><%= user_suggestion_proposal.proposal_cost %></td>
+    <td><%= user_suggestion_proposal.suggestion_id %></td>
+    <td><%= user_suggestion_proposal.user_id %></td>
+    <td><%= link_to 'Show', user_suggestion_proposal %></td>
+    <td><%= link_to 'Edit', edit_user_suggestion_proposal_path(user_suggestion_proposal) %></td>
+    <td><%= link_to 'Destroy', user_suggestion_proposal, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New User suggestion proposal', new_user_suggestion_proposal_path %>

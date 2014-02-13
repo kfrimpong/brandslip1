@@ -1,0 +1,267 @@
+<div id="top-profile">
+  <div class="container">
+    <a href="<%= home_path %>" class="btn" style="float:right; margin-left: 10px">Home</a>
+    <a href="<%= brand_profile_path %>" class="btn" style="float:right">Back to Search</a>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="span3 left-profile">
+        <div class="picture">
+          <% if @user.image? %>
+            <%= image_tag @user.image_url, :size => "250x250", :class => "img-circle"  %>
+          <% else %>
+            <%= image_tag "no_image.png", :size => "250x250", :class => "img-circle" %>
+          <% end %>
+        </div>
+        <div>
+          <span class="stars" data-score="<%=  @avg_rating %>"></span> 
+        </div>
+      </div>
+      <div class="span9 profile-info">
+        <h2>
+          <strong style="color: #F39C12" ><%= current_user.first_name.capitalize %>&nbsp;<%= current_user.last_name.capitalize %></strong>
+          <% if !current_user.company_name.nil? %>
+            at <%= current_user.company_name.capitalize %>
+          <% end %>
+        </h2>
+        <h5>Brand</h5>
+        <blockquote><i><%= @user.description %></i></blockquote>
+        <div class="fields">
+          <div>
+          <% if !@user.interest.nil? %>
+
+            <span class="lbl">Interest:&nbsp;&nbsp;</span> <span><%= Jobcategorymaster.find(@user.interest).category %></span>
+            <% end %>
+          </div>
+          <div>
+          <% if !@user.sub_category.nil? %>
+            <span class="lbl">Target Age Demographic:&nbsp;&nbsp;</span> <span><%= Jobsubcategorymaster.find(@user.sub_category).sub_category %></span>
+          <% end %>
+          </div>
+          <div>
+            <span class="lbl">Website:&nbsp;&nbsp;</span> <a href="//<%= @user.website %>" target="_blank"><span><%= @user.website %></span></a>
+          </div>
+          <div>
+            <span class="lbl">Press #1:&nbsp;&nbsp;</span> <a href="//<%= @user.press %>" target="_blank"><span><%= @user.press %></span></a>
+          </div>
+          <div>
+            <span class="lbl">Press #2:&nbsp;&nbsp;</span> <a href="//<%= @user.press_1 %>" target="_blank"><span><%= @user.press_1 %></span></a>
+          </div>
+          <div>
+            <span class="lbl">Press #3:&nbsp;&nbsp;</span> <a href="//<%= @user.press_2 %>" target="_blank"><span><%= @user.press_2 %></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="bottom-profile">
+  <div class="container">
+    <div class="row button-bar">
+      <div class="span3 left-profile">
+        <div>
+          <% if current_user.following? @user %>
+            <%= form_tag(:controller => "relationships", :action => "unfollow") do %>
+              <%= hidden_field_tag :follower_id, current_user.id %>
+              <%= hidden_field_tag :followed_id, @user.id %>
+              <%= submit_tag "Unfollow", :class => 'btn btn-danger' %>
+            <% end %>
+          <% else %>
+            <%= form_for @relationship do %>
+              <%= hidden_field_tag :followed_id, @user.id %>
+              <%= submit_tag "Follow", :class => 'btn btn-primary' %>
+            <% end %>        
+          <% end %>
+        </div>
+        <div>
+          <a data-toggle="modal" href="#myModal" onclick="send_message_to(this)"
+                                 data-toggle="modal" href="#sendMessage" class="btn btn-info">Send Message</a>
+        </div>
+      </div>
+      <div class="span9 right-profile">
+        <% if !@user.facebook.nil? %>
+          <a href="//<%= @user.facebook %>" target="_blank" title="Facebook">
+            <div class="info" style="width: 75px;">
+              <%= image_tag "medias/facebook.png", :size =>"64x64", :class => "icon" %>
+              
+            </div>
+          </a>
+        <% end %>
+        <% if !@user.twitter.nil? %>
+          <a href="//<%= @user.twitter %>" target="_blank" title="Twitter">
+            <div class="info" style="width: 75px;">
+              <%= image_tag "medias/twitter.png", :size =>"64x64", :class => "icon" %>
+              
+            </div>
+          </a>
+        <% end %>
+        <% if !@user.linkedin.nil? %>
+          <a href="//<%= @user.linkedin %>" target="_blank" title="LinkedIn">
+            <div class="info" style="width: 75px;">
+              <%= image_tag "medias/linkedin.png", :size =>"64x64", :class => "icon" %>
+             
+            </div>
+          </a>
+        <% end %>
+        <% if !@user.youtube_channel_link.nil? && !@user.youtube_channel_link.empty? %>
+          <a href="//<%= @user.youtube_channel_link %>" target="_blank" title="Youtube channel">
+            <div class="info" style="width: 75px;">
+              <%= image_tag "medias/youtube.png", :size =>"64x64", :class => "icon" %>
+             
+              
+            </div>
+          </a>
+        <% end %>
+        <% if !@user.vine_handle.nil? && !@user.vine_handle.empty? %>
+          <a href="//vine.co/<%= @user.vine_handle[1..-1] %>" target="_blank" title="Vine <%= @user.vine_handle %>">
+            <div class="info">
+              <%= image_tag "medias/vine.png", :size =>"64x64", :class => "icon" %>
+              <p>VINE</p>
+              <p>(<%= @user.vine_followers.gsub("Less than", "<").gsub(",000,000", "mil").gsub(",000", "k") %>)</p>
+            </div>
+          </a>
+        <% end %>
+        <% if !@user.instagram_handle.nil? && !@user.instagram_handle.empty? %>
+          <a href="//instagram.com/<%= @user.instagram_handle[1..-1] %>" target="_blank" title="Instagram <%= @user.instagram_handle %>">
+            <div class="info">
+              <%= image_tag "medias/instagram.png", :size =>"64x64", :class => "icon" %>
+              <p>INSTAGRAM</p>
+              <p>(<%= @user.instagram_followers.gsub("Less than", "<").gsub(",000,000", "mil").gsub(",000", "k") %>)</p>
+            </div>
+          </a>
+        <% end %>
+        <% if !@user.snapchat_handle.nil? && !@user.snapchat_handle.empty? %>
+          <a href="//snapchat.com/" target="_blank" title="Snapchat <%= @user.snapchat_handle %>">
+            <div class="info">
+              <%= image_tag "medias/snapchat.png", :size =>"64x64", :class => "icon" %>
+              <p>SNAPCHAT</p>
+              <p>(<%= @user.snapchat_followers.gsub("Less than", "<").gsub(",000,000", "mil").gsub(",000", "k") %>)</p>
+            </div>
+          </a>
+        <% end %>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <h3>Video Introduction:</h3>
+      <div class="span12" >
+        <div style="width: 560px; margin: 0 auto;">
+          <a class="" href="/assets/portfolio/portfolio_item.jpg">
+            <div class="portfolio-item">
+              <div class="portfolio-preview">
+                <img class="portfolio-img" src="/assets/portfolio/portfolio_item.jpg" alt="">
+                  <div class="mask">
+                    <% if !@user.video.nil? %>
+                      <iframe target="_top" width="560" height="315" src="//<%= @user.video.gsub("http://",'').gsub("watch?v=", "embed/") %>" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen ></iframe>
+                    <% end %>
+                  </div>
+              </div>
+            </div>
+            <!-- <div>
+              <h4>Portfolio</h4>
+            </div> -->
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+   <div class="row">
+      <h3>Reviews:</h3>
+       
+      <% @reviews.each do |review| %>
+      
+      <% from_user = User.find(review.from_user) %>
+      <div class="span4 review" style="width: 280px !important;">
+        <div class="picture">
+          <% if(!review.from_user.nil? && !from_user.nil?) %>
+            <% if from_user.image? %>
+              <%= image_tag from_user.image_url, :size =>"48x48", :class => "img-circle"  %>
+            <% else %>
+              <%= image_tag "no_image.png", :size =>"48x48", :class => "img-circle" %>
+            <% end %>
+          <% else %>
+            <%= image_tag "no_image.png", :size =>"48x48", :class => "img-circle" %>
+          <% end %>
+        </div>
+        <div class="name">
+          <% if(!review.from_user.nil? && !from_user.nil?) %>
+            <% if from_user.user_type == 1 %>
+              <a target="_blank" href="<%= brands_profile_show_path(:id => review.from_user) %>"><%= from_user.first_name %> <%= from_user.last_name %></a>
+            <% elsif from_user.user_type == 2 %>
+              <a target="_blank" href="<%= presenters_profile_show_path(:id => review.from_user) %>"><%= from_user.first_name %> <%= from_user.last_name %></a>
+            <% end %>
+
+          <% else %>
+            --
+          <% end %>
+          <div class="rating"><span class="stars" data-score="<%=  review.rating %>"></span> (<%= number_with_precision(review.rating, :precision => 1) %>)</div>
+        </div>
+        <div class="body" style="clear: both">
+          <%= review.review%>
+        </div>
+      </div>
+      <% end %>
+    </div>
+ 
+    
+    <hr>
+    <footer>
+      <p></p>
+    </footer>
+  </div>
+</div>
+<style>
+.span9 {
+    width: 840px!important;
+}
+.btn.btn-info {
+  
+    padding-left: 93px;
+}
+</style>
+<script type="text/javascript" src="/assets/jquery.js"></script>
+<script type="text/javascript" src="/assets/jquery-1.8.2.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    
+        
+    $.fn.raty.defaults.path = '/assets/ratings';
+    $('.stars').raty({      
+      precision: true,
+      readOnly:  true,
+      score: function() {
+        return $(this).attr('data-score');
+      }
+    }); 
+  });
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= hidden_field_tag "from_user", current_user.id %>
+      <%= hidden_field_tag "to_user", @user.id %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Message</h4>
+      </div>
+      <div class="modal-body">
+        <div style="padding-left: 50px"class="input-group">
+          <input id="contact-name" type="text" class="message_title" name="contact-name" placeholder="Title">
+          <textarea id="contact-message" class="message_body" name="message_body" placeholder="Message"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= image_tag("loader.gif",  :id => "ajaxloading", :style => "display:none") %>
+        <span id="success_msg"></span>
+        <button type="button" class="btn btn-primary btn-mini" onclick="send_message()">Send Message</button>
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

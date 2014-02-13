@@ -1,0 +1,196 @@
+<% @job_details.each do |job| %>
+  <%= hidden_field_tag "hdn_job_id", job.id %>
+  <span style="float: right; display: inline-block;">
+    <%= link_to 'Back to BrandSlip', home_path, :class => 'btn btn-primary' %> 
+  </span>
+  <div>
+    <h1 style="font-family: Georgia,Times New Roman;font-weight: normal;
+        color: #00468C!important;font-size: 32px;margin-bottom: 8px;">
+        <%= job.job_title %>
+    </h1>
+  </div>
+  <div style="height: 20px;width: 100%">
+    <span style="float: left;color: teal;font-size: 14px;">
+      <%= job.job_category.nil? ? "--" : Jobcategorymaster.find(job.job_category).category %> > 
+      <%= job.job_sub_category.nil? ? "--" : Jobsubcategorymaster.find(job.job_sub_category).sub_category %>
+    </span>
+  </div>
+  <div class="praposal-info" style="width: 100%;border: 3px solid dimgrey;display: inline-table">
+    <div style="width: 100%;">
+      <div style="width: 35%;float: left;padding-left: 10px;">
+        <% if job.job_user_id.nil? %>
+          <span style="font-size: 15px; color: royalblue">Name: </span> --<br/>
+        <% else %>
+          <% if(User.find(job.job_user_id).nil?) %>
+            <span style="font-size: 15px; color: royalblue">Name: </span> --<br/>
+          <% else %>
+            <span style="font-size: 15px; color: royalblue">Name: </span> <a target="_blank" href="<%= presenters_profile_show_path(:id => job.job_user_id)%>">
+              <%= User.find(job.job_user_id).first_name %>&nbsp;<%= User.find(job.job_user_id).last_name %></a><br/>
+          <% end %>
+        <% end %>
+        <span style="font-size: 15px; color: royalblue">Brandslip Title: </span> <%= job.job_title %><br/>
+        <span style="font-size: 15px; color: royalblue">Interest: </span> <%= job.job_category.nil? ? "--" : Jobcategorymaster.find(job.job_category).nil? ? "--" : Jobcategorymaster.find(job.job_category).category %><br/>
+        <span style="font-size: 15px; color: royalblue">Demographic Criteria: </span> <%= job.job_sub_category.nil? ? "--" : Jobsubcategorymaster.find(job.job_sub_category).nil? ? "--" : Jobsubcategorymaster.find(job.job_sub_category).sub_category %><br/>
+        <span style="font-size: 15px; color: royalblue">BrandSlip Date: </span><%= job.job_start_date.strftime("%a, %b %d, %Y") %><br/>
+        <span style="font-size: 15px; color: royalblue">Posted: </span><%= job.created_at.strftime("%a, %b %d, %Y") %><br/>
+        <% if job.job_type == 1 %>
+          <span style="font-size: 15px; color: royalblue">City: </span><%= job.city %></span><br/>
+        <% end %>
+      </div>
+      <div style="width: 65%;float: right">
+        <% if job.job_type == 2 %>
+          <span style="font-size: 15px; color: royalblue">Online Media Source: </span><%= job.online_media_source %></span><br/>
+          <span style="font-size: 15px; color: royalblue">Followers/Subscribers: </span><%= job.followers_subscribers %></span><br/>
+        <% else %>
+          <span style="font-size: 15px; color: royalblue">CrowdSize: </span><%= job.crowd_size %></span><br/>
+          <span style="font-size: 15px; color: royalblue">Proof Selector: </span><%= job.proof_selector %></span><br/>
+        <% end %>
+  <%#*<span style="font-size: 15px; color: royalblue">Time Left: </span> <%= job.job_valid_for %> 
+        <span style="font-size: 15px; color: royalblue">Time: </span><%= job.time.nil? ? "--" : job.time.strftime("%H:%M") %></span><br/>
+        <span style="font-size: 15px; color: royalblue">BrandSlip Starting Bid: </span>$<%= job.job_price_fixed_type %><br/>
+        <% if job.job_type == 1 %>
+          <span style="font-size: 15px; color: royalblue">State: </span><%= job.state %></span><br/>
+        <% end %>
+        <span style="font-size: 15px; color: royalblue">Description:  </span><%= job.job_description %>
+      </div>
+    </div>
+  </div>
+  <div style="margin-bottom: 20px">
+    <!-- IS JOB_ASSIGNED IF -->
+    <% if job.is_assigned == 1 %>
+      <!-- Brandslip is assigned to perticular Brand.. -->
+      <div style="font-size: 25px; padding-top: 30px; color: #00468C">Accepted Bid</div>
+      <div id="users_applied_for_job" >
+        <% @users_applied_for_job.each do |proposal| %>
+          <div class="praposal-info" id="div_bid_<%=  %>" style="border: 3px solid dimgrey">
+            <div style="width: 50%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Presented by: </span>
+              <span><a target="_blank" href="<%= brands_profile_show_path(:id => proposal.user_id)%>">
+                  <%= proposal['first_name']  %>&nbsp;<%= proposal['last_name']  %></a></span><br/>
+            </div>
+            <div style="width: 50%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Cost for the Proposal: </span>
+              <span><%= proposal.proposal_cost %></span><br/>
+            </div>
+            <div style="width: 100%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Description About the BrandSlip: </span>
+              <span><%= proposal.proposal_details %></span><br/>
+            </div>
+          </div>
+        <% end %>        
+      </div> 
+      <% if current_user.user_type == 2 %>
+        <%# if job.is_mark_done.nil? %>
+          <%= form_tag({:controller => "brandslip", :action => "review_rating", :method => 'post'}, {:id => 'form_presenter_mark_done'}) do %>
+            <%= hidden_field_tag :job_id, job.id %>
+            <%= hidden_field_tag :to_user, job.assigned_to %>
+            <!-- <div style="text-align: center;padding-top: 20px">
+              <b>Video:</b><br />
+              <input id="bid_video" name="video" type="text" style="width: 350px;" placeholder="http://www.youtube.com/watch?v=o6JIxBJdXR0" />
+            </div> -->
+            <div style="text-align: center;padding-top: 20px">
+              <b>Comment:</b><br />
+              <textarea id="bid_comment" name="comment" rows="5" cols="40"></textarea>
+            </div>
+            <div style="text-align: center;padding-top: 20px;padding-bottom: 20px">
+              <%= submit_tag 'Mark Done', :class => 'btn btn-primary btn-mini' %> 
+            </div>
+          <% end %>      
+        <%# end %>
+
+      <% else %>
+        <% if job.is_mark_done == 1 %>
+          <%= form_tag({:controller => "brandslip", :action => "review_rating", :method => 'post'}, {:id => 'form_presenter_mark_done'}) do %>
+            <%= hidden_field_tag :job_id, job.id %>
+            <%= hidden_field_tag :to_user, job.job_user_id %>
+           <!--  <div style="margin: 20px auto; display: table">
+            <iframe style="margin-top: 20px;margin-left: 50px" target="_top" width="500" height="315" src="//<%#= job.video.gsub("http://",'').gsub("watch?v=", "embed/") %>" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen ></iframe>
+          </div> -->
+            <div style="text-align: center;padding-top: 20px">
+              <b>Comment:</b>
+              <span><%= job.comment %></span>
+            </div>
+            <div style="text-align: center;padding-top: 20px;padding-bottom: 20px">
+              <%= submit_tag 'Mark Done', :class => 'btn btn-primary btn-mini' %> 
+            </div>
+          <% end %>      
+        <% end %>
+      <% end %>
+
+      <!-- IS JOB_ASSIGNED ELSE -->        
+    <% else %>
+      <!-- Brandslip is still open for bid.. -->
+      <% if current_user.user_type == 1 %>
+        <div style="font-size: 25px; padding-top: 30px; color: #00468C">My Bid</div>
+      <% else %>
+        <div style="font-size: 25px; padding-top: 30px; color: #00468C">Bids by Brands</div>
+      <% end %>
+      <div id="users_applied_for_job">
+        <% @users_applied_for_job.each do |proposal| %>
+          <div class="praposal-info" id="div_bid_<%= proposal.id %>" style="border: 3px solid dimgrey">
+            <div style="width: 50%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Presented by: </span>
+              <span><a target="_blank" href="<%= brands_profile_show_path(:id => proposal.user_id)%>">
+                  <%= proposal['first_name']  %>&nbsp;<%= proposal['last_name']  %></a></span><br/>
+            </div>
+            <div style="width: 50%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Cost for the Proposal: </span>
+              <span>$<%= proposal.proposal_cost %></span><br/>
+            </div>
+            <div style="width: 100%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Description About the BrandSlip: </span>
+              <span><%= proposal.proposal_details %></span><br/>
+            </div>            
+            <% if current_user.user_type == 2 && job.is_assigned != 1 %>
+              <div style="display: inline-block;margin-top: 55px;margin-left: 15px;">
+                <a style="color: white" onclick="show_accept_bid_popup('<%= proposal.id %>')"
+                   data-toggle="modal" href="#myModalAcceptDecline" class="btn btn-primary btn-mini">Accept Bid</a>
+                <a style="color: white" onclick="show_decline_bid_popup('<%= proposal.id %>')"
+                   data-toggle="modal" href="#myModalAcceptDecline" class="btn btn-danger btn-mini">Decline Bid</a>
+              </div>
+            <% end %>
+          </div>
+        <% end %>        
+      </div>    
+    <% end %>     
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){ 
+    $("form#form_presenter_mark_done").submit(function() { 
+      if($("textarea#bid_comment").val() == ""){
+        alert("Please enter comment before mark done.");
+        return false;
+      }
+      if($("input#bid_video").val() == ""){
+        alert("Please enter video link before mark done.");
+        return false;
+      }
+    });
+  });
+
+
+
+</script>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModalAcceptDecline">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <span id="success_msg"></span>
+        <button id="btn_delete_yes" type="button" data-dismiss="modal" class="btn btn-primary btn-mini">Yes</button>
+        <button type="button" id="btn_close" class="btn btn-default btn-mini" data-dismiss="modal">No</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

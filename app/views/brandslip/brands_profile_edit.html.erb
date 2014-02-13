@@ -1,0 +1,26 @@
+<div style="padding-left: 400px"><h1>Editing Brands profile</h1></div>
+  <div style="border-left-width: 17px;padding-left: 279px; padding-top: 107px;height: 500px;; width: 1040px; border: 1px solid #2d6987;margin-left: 136px;>
+  <%= form_for(@brands_profile_edit) do |f| %>
+    <div class="input-group">
+      <%= f.label :first_name%>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.email_field :first_name %>
+    </div>
+    <div class="input-group">
+      <%= f.label :last_name%>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.email_field :last_name %>
+    </div>
+    <div class="input-group">
+      <%= f.label :email %>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.email_field :email %>
+    </div>
+    <div class="input-group">
+      <%= f.label :company_name %>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.email_field :company_name %>
+    </div>
+    <div class="input-group">
+      <%= f.label :phone_no %>&nbsp;&nbsp;&nbsp;&nbsp;
+      <%=  f.email_field :phone_no %>
+    </div>
+  <% end %>
+</div>
+  

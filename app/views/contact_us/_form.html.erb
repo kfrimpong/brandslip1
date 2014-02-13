@@ -1,0 +1,62 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#admin_nav li").each(function(){
+    $(this).removeClass('active');
+  })
+  $("#li_contact_us").addClass("active");
+});
+</script> 
+
+<%= form_for(@contact_u,:html =>{:class => "form-horizontal"}) do |f| %>
+<% if @contact_u.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@contact_u.errors.count, "error") %> prohibited this contact_u from being saved:</h2>
+  <ul>
+    <% @contact_u.errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+<div class="control-group">
+  <%= f.label :name,:class=>"control-label" %>
+  <div class="controls">
+    <%= f.text_field :name %>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :email,:class=>"control-label" %>
+  <div class="controls">
+    <%= f.text_field :email %>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :company_name,:class=>"control-label" %>
+  <div class="controls">
+    <%= f.text_field :company_name %>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :location,:class=>"control-label" %>
+  <div class="controls">
+    <%= f.text_field :location %>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :phone_no,:class=>"control-label" %>
+  <div class="controls">
+    <%= f.text_field :phone_no %>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :message,:class=>"control-label" %>
+  <div class="controls">
+    <%= f.text_area :message, :cols =>30, :rows => 5 %>
+  </div>
+</div>
+<div class="control-group" style="margin-top: 10px">
+  <div class="controls">
+    <%= f.submit "Contact US", :class => 'btn btn-primary btn-small' %>
+  </div>    
+</div>
+<% end %>

@@ -1,0 +1,221 @@
+<% @suggestion_details.each do |suggestion| %>
+  <%= hidden_field_tag "hdn_suggestion_id", suggestion.id %>
+  <span style="float: right;display: inline-block;">
+    <%= link_to 'Back to BrandSlip Suggestion', home_path, :class => 'btn btn-primary' %> 
+  </span>
+  <div>
+    <h1 style="font-family: Georgia,Times New Roman;font-weight: normal;
+        color: #00468C!important;font-size: 32px;margin-bottom: 8px;">
+        <%= suggestion.title %>
+    </h1>
+  </div>
+  <div style="height: 20px;width: 100%">
+    <span style="float: left;color: teal;font-size: 14px;">
+      <%= suggestion.category.nil? ? "--" : Jobcategorymaster.find(suggestion.category).category %> > 
+      <%= suggestion.sub_category.nil? ? "--" : Jobsubcategorymaster.find(suggestion.sub_category).sub_category %>
+    </span>
+  </div>
+  <div class="praposal-info" style="width: 100%;border: 3px solid dimgrey;display: inline-table">
+    <div style="width: 100%;">
+      <div style="width: 35%;float: left;padding-left: 10px;">
+        <% if suggestion.user_id.nil? %>
+          <span style="font-size: 15px; color: royalblue">Name: </span> --<br/>
+        <% else %>
+          <% if(User.find(suggestion.user_id).nil?) %>
+            <span style="font-size: 15px; color: royalblue">Name: </span> --<br/>
+          <% else %>
+            <span style="font-size: 15px; color: royalblue">Name: </span> 
+            <a target="_blank" href="<%= brands_profile_show_path(:id => suggestion.user_id)%>"><%= User.find(suggestion.user_id).first_name %>
+            <%= User.find(suggestion.user_id).last_name %></a><br/>
+          <% end %>
+        <% end %>
+        <span style="font-size: 15px; color: royalblue">Title: </span> <%= suggestion.title %><br/>
+        <span style="font-size: 15px; color: royalblue">Interest: </span> <%= suggestion.category.nil? ? "--" : Jobcategorymaster.find(suggestion.category).nil? ? "--" : Jobcategorymaster.find(suggestion.category).category %><br/>
+        <span style="font-size: 15px; color: royalblue">Demographic Criteria: </span> <%= suggestion.sub_category.nil? ? "--" : Jobsubcategorymaster.find(suggestion.sub_category).nil? ? "--" : Jobsubcategorymaster.find(suggestion.sub_category).sub_category %><br/>
+        <span style="font-size: 15px; color: royalblue">BrandSlip Date: </span><%= suggestion.start_date.strftime("%a, %b %d, %Y") %><br/>
+        <span style="font-size: 15px; color: royalblue">Posted: </span><%= suggestion.created_at.strftime("%a, %b %d, %Y") %><br/>
+        <% if suggestion.suggestion_type == 1 %>
+          <span style="font-size: 15px; color: royalblue">city: </span><%= suggestion.city %></span><br/>
+        <% end %>
+      </div>
+      <div style="width: 65%;float: right">
+        <% if suggestion.suggestion_type == 2 %>
+          <span style="font-size: 15px; color: royalblue">Online Media Source: </span><%= suggestion.online_media_source %></span><br/>
+          <span style="font-size: 15px; color: royalblue">Followers/Subscribers: </span><%= suggestion.followers_subscribers %></span><br/>
+        <% else %>
+          <span style="font-size: 15px; color: royalblue">CrowdSize: </span><%= suggestion.crowd_size %></span><br/>
+          <span style="font-size: 15px; color: royalblue">Proof Selector: </span><%= suggestion.proof_selector %></span><br/>
+        <% end %>
+        <span style="font-size: 15px; color: royalblue">Time Left: </span> <%= suggestion.valid_for %> days<br/>
+        <span style="font-size: 15px; color: royalblue">Time: </span><%= suggestion.time.nil? ? "--" : suggestion.time.strftime("%H:%M") %></span><br/>
+        <span style="font-size: 15px; color: royalblue">BrandSlip Starting Bid: </span>$<%= suggestion.price %><br/>
+        <% if suggestion.suggestion_type == 1 %>
+          <span style="font-size: 15px; color: royalblue">State: </span><%= suggestion.state %></span><br/>
+        <% end %>
+        <span style="font-size: 15px; color: royalblue">Description:  </span><%= suggestion.description %>
+      </div>
+    </div>
+  </div>
+  <div style="margin-bottom: 20px">
+    <!-- IS JOB_ASSIGNED IF -->
+    <% if suggestion.is_assigned == 1 %>
+      <!-- Brandslip suggestion is assigned to perticular Presenter.. -->
+      <div style="font-size: 25px; padding-top: 30px; color: #00468C">Accepted Bid</div>
+      <div id="users_applied_for_suggestion" >
+        <% @users_applied_for_suggestion.each do |proposal| %>
+          <div class="praposal-info" id="div_bid_<%=  %>" style="border: 3px solid dimgrey">
+            <div style="width: 50%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Presented by: </span>
+              <span>
+                <a target="_blank" href="<%= presenters_profile_show_path(:id => proposal.user_id)%>">
+                  <%= proposal['first_name'] %> <%= proposal['last_name'] %>
+                </a>
+              </span><br/>
+            </div>
+            <div style="width: 50%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Cost for the Proposal: </span>
+              <span>$<%= proposal.proposal_cost %></span><br/>
+            </div>
+            <div style="width: 100%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Description About the BrandSlip: </span>
+              <span><%= proposal.proposal_details %></span><br/>
+            </div>
+          </div>
+        <% end %>        
+      </div> 
+      <% if current_user.user_type == 2 %>
+        <%# if suggestion.is_mark_done.nil? %>
+          <%= form_tag({:controller => "brandslip", :action => "suggestion_review_rating", :method => 'post'}, {:id => 'form_brand_mark_done'}) do %>
+              <%= hidden_field_tag :suggestion_id, suggestion.id %>
+              <%= hidden_field_tag :to_user, suggestion.user_id %>      
+           <!--  <div style="text-align: center;padding-top: 20px">
+              <b>Video:</b><br />
+              <input id="bid_video" name="video" type="text" style="width: 350px;" placeholder="http://www.youtube.com/watch?v=o6JIxBJdXR0" />
+            </div> -->
+            <div style="text-align: center;padding-top: 20px">
+              <b>Comment:</b><br />
+              <textarea id="bid_comment" name="comment" rows="5" cols="40"></textarea>
+            </div>
+            <div style="text-align: center;padding-top: 20px;padding-bottom: 20px">
+              <%= submit_tag 'Mark Done', :class => 'btn btn-primary btn-mini',:id=>"apple" %> 
+            </div>
+          <% end %>
+        <%# end %>
+      <% else %>
+        <% if suggestion.is_mark_done == 1 %>
+          <%= form_tag({:controller => "brandslip", :action => "suggestion_review_rating", :method => 'post'}, {:id => 'form_brand_mark_done'}) do %>
+            <%= hidden_field_tag :suggestion_id, suggestion.id %>
+            <%= hidden_field_tag :to_user, suggestion.assigned_to %>
+            <!-- <div style="margin: 20px auto; display: table">
+            <iframe target="_top" width="500" height="315" src="//<%#= suggestion.video.gsub("http://",'').gsub("watch?v=", "embed/") %>" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen ></iframe>
+            </div> -->
+            <div style="text-align: center;padding-top: 20px">
+              <b>Comment:</b>
+              <span><%= suggestion.comment %></span>
+            </div>
+            <div style="text-align: center;padding-top: 20px;padding-bottom: 20px">
+              <%= submit_tag 'Mark Done', :class => 'btn btn-primary btn-mini' %> 
+            </div>
+          <% end %>      
+        <% end %>
+      <% end %>      
+     
+            
+    <!-- IS SUGGESTION_ASSIGNED ELSE -->        
+    <% else %>
+      <!-- Brandslip is still open for bid.. -->
+      <% if current_user.user_type == 2 %>
+        <div style="font-size: 25px; padding-top: 30px; color: #00468C">My Bid On Brandslip Suggestion</div>
+      <% else %>
+        <div style="font-size: 25px; padding-top: 30px; color: #00468C">Bids by Influencers On Brandslip Suggestion</div>
+      <% end %>
+      <div id="users_applied_for_suggestion">
+        <% @users_applied_for_suggestion.each do |proposal| %>
+          <div class="praposal-info" id="div_bid_<%= proposal.id %>" style="border: 3px solid dimgrey">
+            <div style="width: 50%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Presented by: </span>
+              <span><a target="_blank" href="<%= presenters_profile_show_path(:id => proposal.user_id)%>"><%= proposal['first_name']  %>&nbsp;<%= proposal['last_name']  %></a></span><br/>
+            </div>
+            <div style="width: 50%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Cost for the Proposal: </span>
+              <span>$<%= proposal.proposal_cost %></span><br/>
+            </div>
+            <div style="width: 100%;float: left;padding-left: 10px;">
+              <span style="font-size: 15px; color: royalblue">Description About the BrandSlip Suggestion: </span>
+              <span><%= proposal.proposal_details %></span><br/>
+            </div>            
+            <% if current_user.user_type == 1 && suggestion.is_assigned != 1 %>
+              <div style="display: inline-block;margin-top: 55px;margin-left: 15px;">
+                <a style="color: white" onclick="show_accept_suggestion_bid_popup('<%= proposal.id %>')"
+                   data-toggle="modal" href="#myModalAcceptDecline" class="btn btn-primary btn-mini">Accept Bid</a>
+                <a style="color: white" onclick="show_decline_suggestion_bid_popup('<%= proposal.id %>')"
+                   data-toggle="modal" href="#myModalAcceptDecline" class="btn btn-danger btn-mini">Decline Bid</a>
+              </div>
+            <% end %>
+          </div>
+        <% end %>        
+      </div>    
+    <% end %>     
+  </div>
+<% end %>
+
+<div class="modal fade" id="mark_done_popup">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <b>We have notified the brand. Thanks.</b>
+      </div>
+      
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script type="text/javascript">
+  $(document).ready(function(){ 
+    $("form#form_brand_mark_done").submit(function() { 
+      if($("textarea#bid_comment").val() == ""){
+        alert("Please enter comment before mark done.");
+        return false;
+      }
+      if($("input#bid_video").val() == ""){
+        alert("Please enter video link before mark done.");
+        return false;
+      }
+    });
+  });
+  $("#apple").click(function(){
+  $("#form_brand_mark_done").submit(function(){
+     
+      if ($("textarea#bid_comment").val() != ""){
+      $('#mark_done_popup').modal("show");  
+      $(".modal-body").focus();
+    }
+     })
+  })
+</script>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModalAcceptDecline">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <span id="success_msg"></span>
+        <button id="btn_delete_yes" type="button" data-dismiss="modal" class="btn btn-primary btn-mini">Yes</button>
+        <button type="button" id="btn_close" class="btn btn-default btn-mini" data-dismiss="modal">No</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+          

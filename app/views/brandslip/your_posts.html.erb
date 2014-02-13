@@ -1,0 +1,46 @@
+<div class="container" style="width: 100%;margin-top: 20px;margin-left: 80%;margin-right: 50px">
+  <span style="display: inline-block;">
+    <%= link_to 'Back to Home', home_path, :class => 'btn btn-primary' %> 
+  </span>
+</div>
+
+<div class="container" style="margin-top: 20px">
+  <div class="span3"></div>
+  <div class="span6"><b>Total Posts:</b> <%= @posts.nil? ? 0 : @posts.size %></div>
+  <div class="span3"></div>
+</div>
+<div class="container" style="margin-top: 20px;margin-bottom: 20px">
+<% @posts.each do |post| %>
+    <div class="span3"></div>
+    <div class="span6" id="your_post_<%= post.id %>" style="border: 2px solid dimgrey;padding: 15px 15px 13px;font-size: 13px;margin-top: 20px;height: auto;">
+      <div style="width: 100%;float: left; padding-right: 10px;font-size: 15px">
+          <%= post.content %>
+      </div>
+      <div style="margin-top: 10px;display: inline-block">
+        <a style="color: white" onclick="show_delete_post_popup('<%= post.id %>')"
+                           data-toggle="modal" href="#myModalDeletePost" class="btn btn-danger btn-mini">Delete</a>
+      </div>
+    </div>
+    <div class="span3"></div>
+  <% end %>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModalDeletePost">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <span id="success_msg"></span>
+        <button id="btn_delete_yes" type="button" class="btn btn-primary btn-mini">Delete</button>
+        <button type="button" id="btn_close" class="btn btn-default btn-mini" data-dismiss="modal">No</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

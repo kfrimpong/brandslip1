@@ -1,0 +1,131 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#brandslip_profile").addClass("active");
+  });
+</script> 
+<style>
+.footer{
+  position: absolute!important;
+}
+</style>
+<div class="container-fluit" id="search-bar">
+  <div class="row" style="padding-bottom: 20px;">
+    <div class="col-12" style="text-align: center;">
+      <form action="/presenter_profile" class="navbar-form">
+        <input type="text" name="full_name" class="form-control" placeholder="Search Profile..." style="width: 550px;" />
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="padding-top: 20px">
+  <div class="row">
+    <div class="col-12">
+      <div class="col-4"></div>
+     
+<%if @presenters.blank?%>
+ <div><i><b><span id="result_found"><%= @presenters.length %></span></b> results found.</i></div>
+<%else%>    
+      <div class="col-3"><b><span id="result_found"><%= @presenters.length %></span></b> results found.</div>
+      </div>
+<%end%>
+      <div class="col-lg-3">
+        <div style="background-color: honeydew;padding-top:0px;">
+          <ul style="list-style-type: none;border: 2px solid dimgrey;padding-left: 3px;" id="category_filter">
+            <li>
+              <input id="user_presenter_interest_id" name="user_presenter_interest_id" data-val="-1" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+              <a style="color: #50852C;font-weight: bold;">All Sectors (<%= User.where(:user_type => 2, :is_approved => 1 ).count() %>)</a></li>
+            <% Jobcategorymaster.all.each do |category| %>
+             <% if @inf_jobcategory.include?category.category %>
+              <li>
+
+                  <input id="user_presenter_interest_id" name="user_presenter_interest_id" data-val="<%= category.id %>" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                  <a href="#"><%= category.category %> (<%= User.where(:user_type => 2, :is_approved => 1, :interest => category.id).count() %>)</a></li>
+              <% end %>    
+            <% end %>
+          </ul>
+        </div>
+        
+        <div style="background-color: honeydew;padding-top:0px;">
+          <ul id="" style="list-style-type: none;border: 2px solid dimgrey;  padding-left: 3px">
+            <li style="padding-left: 25px;">
+              <a style="color: #50852C;font-weight: bold;">Target Age Demographic</a>
+            </li>
+            <li>
+              <input id="presenter_demographic_age" data-val="-1" class="" name="" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+              <a href="#">All (<%= User.where(:user_type => 2, :is_approved => 1).count() %>)</a>
+            </li>
+            <% Jobsubcategorymaster.all.each do |category| %>
+              <li>
+
+                <input id="presenter_demographic_age" data-val="<%= category.id %>" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#"><%= category.sub_category %> (<%= User.where(:user_type => 2, :is_approved => 1, :sub_category => category.id).count() %>)</a>
+              </li>
+            <% end %>          
+          </ul>        
+        </div>
+
+        <div style="background-color: honeydew;padding-top:0px;">
+          <ul id="" style="list-style-type: none;border: 2px solid dimgrey;  padding-left: 3px">
+            <li style="padding-left: 25px;">
+              <a style="color: #50852C;font-weight: bold;">Online Source</a>
+            </li>
+              <li>
+                <input id="online_source" data-val="youtube_channel_link" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">Youtube (<%= User.where("user_type=2 and is_approved=1 and youtube_channel_link is not null and length(youtube_channel_link)>1").count() %>)</a>
+              </li>
+              <li>
+                <input id="online_source" data-val="vine_handle" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">Vine (<%= User.where("user_type=2 and is_approved=1 and vine_handle is not null and length(vine_handle)>1").count() %>)</a>
+              </li>
+              <li>
+                <input id="online_source" data-val="instagram_handle" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">Instagram (<%= User.where("user_type=2 and is_approved=1 and instagram_handle is not null and length(instagram_handle)>1").count() %>)</a>
+              </li>
+              <li>
+                <input id="online_source" data-val="snapchat_handle" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">Snapchat (<%= User.where("user_type=2 and is_approved=1 and snapchat_handle is not null and length(snapchat_handle)>1").count() %>)</a>
+              </li>
+          </ul>        
+        </div>
+          <div style="background-color: honeydew;padding-top:0px;">
+          <ul id="" style="list-style-type: none;border: 2px solid dimgrey;  padding-left: 3px">
+            <li style="padding-left: 25px;">
+              <a style="color: #50852C;font-weight: bold;">Number of Followers/Subscribers</a>
+            </li>
+              <li>
+                <input id="presenter_followers_subscribers" data-val="Less than 50,000" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">Less than 50,000(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="less than 50,000"').count() %>)</a>
+              </li>
+              <li>
+                <input id="presenter_followers_subscribers" data-val="50,000-100,000" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">50,000 - 100,000(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="50,000-100,000"').count() %>)</a>
+              </li>
+              <li>
+                <input id="presenter_followers_subscribers" data-val="100,000-500,000" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">100,000 - 500,000(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="100,000-500,000"').count() %>)</a>
+              </li>
+              <li>
+                <input id="presenter_followers_subscribers" data-val="500,000-1,000,000" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">500,000 - 1,000,000(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="500,000-1,000,000"').count() %>)</a>
+              </li>
+              <li>
+                <input id="presenter_followers_subscribers" data-val="1,000,000+" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+                <a href="#">1,000,000 +(<%= Job.where('job_type=2 and is_assigned is null and DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and followers_subscribers="1,000,000+"').count() %>)</a>
+              </li>
+          </ul>        
+        </div>      
+        
+      </div>
+      
+      <div class="col-9" style="margin-top: 25px; ">
+        <div id="users_applied_for_job" >
+          <div id="presenter_profile" style="float: left; width: 650px; margin-left: 100px; margin-bottom: 20px;padding-bottom: 50px">
+             <%= render "presenter_profile" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+

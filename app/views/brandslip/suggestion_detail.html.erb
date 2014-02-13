@@ -1,0 +1,108 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#my_brandslip").addClass("active");
+    $("form.new_user_suggestion_proposal").submit(function(){
+      var submit = true;
+      var empty_boxes = [];
+      if($("#pro_details").val() == ""){
+        empty_boxes.push("Proposal Description");
+        submit = false;
+      }
+      if($("#user_suggestion_proposal_proposal_cost").val() == ""){
+        empty_boxes.push("Proposal Cost");
+        submit = false;
+      }
+      if($(".chk_terms_and_cond").is(":checked")) {
+      }
+        else{
+        empty_boxes.push("Accept terms and conditions.");
+        submit = false;
+      }
+      if(submit == false){
+        $("#btn_job_err_msg").click();
+        $("div#myModalUserErrorMsg").find(".modal-body").text("Please enter " + empty_boxes.join(', ') +" fields...");
+        return false;
+      }else{
+        if(!$(".chk_terms_and_cond").is(":checked")) {
+          empty_boxes.push("Accept terms and conditions.");
+          submit = false;     
+          $("#btn_job_err_msg").click();
+          $("div#myModalUserErrorMsg").find(".modal-body").text("Please " + empty_boxes.join(', '));
+          return false;          
+        }
+      }
+    });
+  });
+</script> 
+<div class="container" style="padding-top: 20px;">
+  <div class="row">
+    <div class="col-lg-9">
+      <div style="width: 100%;">
+        <% @suggestion_details.each do |suggestion| %>
+          <div>
+            
+          <span style="padding-left: 1050px; display: inline-block;margin-right: 100px;">
+          <% if suggestion.city.nil? %>
+           <%= link_to 'Back to Search', search_suggestion_path+"?type=online", :class => 'btn btn-primary' %> 
+            
+            <% else %>
+           <%= link_to 'Back to Search', search_suggestion_path+"?type=public_speaking", :class => 'btn btn-primary' %> 
+           <% end %>
+          </span> 
+            <h1 style="font-family: Georgia,Times New Roman;font-weight: normal;color: #333!important;font-size: 32px;margin-bottom: 8px;">
+              <%= suggestion.title %>
+            </h1>
+          </div>
+          <div style="height: 20px;width: 100%">
+            <span style="float: left;color: #5d656e;font-size: 14px;">
+              <%= suggestion.category.nil? ? "--" : Jobcategorymaster.find(suggestion.category).category %> > <%= suggestion.sub_category.nil? ? "--" : Jobsubcategorymaster.find(suggestion.sub_category).sub_category %>
+            </span>
+          </div>
+          <div class="praposal-info" style="width: 100%;border: 3px solid dimgrey;display: inline-table">
+            <div style="width: 100%;">
+              <div style="width: 35%;float: left;padding-left: 10px;">
+                <% if suggestion.user_id.nil? %>
+                  <span style="font-size: 15px; color: royalblue">Name: </span> --<br/>
+                <% else %>
+                  <% if(User.find(suggestion.user_id).nil?) %>
+                    <span style="font-size: 15px; color: royalblue">Name: </span> --<br/>
+                  <% else %>
+                    <span style="font-size: 15px; color: royalblue">Name: </span> <a target="_blank" href="<%= brands_profile_show_path(:id => suggestion.user_id)%>"><%= User.find(suggestion.user_id).first_name %></a><br/>
+                  <% end %>
+                <% end %>
+                <span style="font-size: 15px; color: royalblue">Title: </span> <%= suggestion.title %><br/>
+                <span style="font-size: 15px; color: royalblue">Interest: </span> <%= suggestion.category.nil? ? "--" : Jobcategorymaster.find(suggestion.category).nil? ? "--" : Jobcategorymaster.find(suggestion.category).category %><br/>
+                <span style="font-size: 15px; color: royalblue">Demographic Criteria: </span> <%= suggestion.sub_category.nil? ? "--" : Jobsubcategorymaster.find(suggestion.sub_category).nil? ? "--" : Jobsubcategorymaster.find(suggestion.sub_category).sub_category %><br/>
+                <span style="font-size: 15px; color: royalblue">BrandSlip Date: </span><%= suggestion.start_date.strftime("%a, %b %d, %Y") %><br/>
+                <span style="font-size: 15px; color: royalblue">Posted: </span><%= suggestion.created_at.strftime("%a, %b %d, %Y") %><br/>
+                <% if suggestion.suggestion_type == 1 %>
+                  <span style="font-size: 15px; color: royalblue">city: </span><%= suggestion.city %></span><br/>
+                <% end %>
+              </div>
+              <div style="width: 65%;float: right">
+                <% if suggestion.suggestion_type == 2 %>
+                  <span style="font-size: 15px; color: royalblue">Online Media Source: </span><%= suggestion.online_media_source %></span><br/>
+                  <span style="font-size: 15px; color: royalblue">Followers/Subscribers: </span><%= suggestion.followers_subscribers %></span><br/>
+                <% else %>
+                  <span style="font-size: 15px; color: royalblue">CrowdSize: </span><%= suggestion.crowd_size %></span><br/>
+                  <span style="font-size: 15px; color: royalblue">Proof Selector: </span><%= suggestion.proof_selector %></span><br/>
+                <% end %>
+                <span style="font-size: 15px; color: royalblue">Time Left: </span> <%= suggestion.valid_for %> days<br/>
+                <span style="font-size: 15px; color: royalblue">Time: </span><%= suggestion.time.nil? ? "--" : suggestion.time.strftime("%H:%M") %></span><br/>
+                <span style="font-size: 15px; color: royalblue">BrandSlip Starting Bid: </span>$<%= suggestion.price %><br/>
+                <% if suggestion.suggestion_type == 1 %>
+                  <span style="font-size: 15px; color: royalblue">State: </span><%= suggestion.state %></span><br/>
+                <% end %>
+                <span style="font-size: 15px; color: royalblue">Description:  </span><%= suggestion.description %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-lg-9" id="post_bid_detail_div" style="padding-bottom: 30px; border: 3px solid dimgrey;height: auto;margin-top: 50px;background-color: white;margin-bottom: 20px">
+        <%=  render "user_suggestion_proposals/form" %>
+    </div>
+   
+  </div>
+</div>  

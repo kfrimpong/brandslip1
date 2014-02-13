@@ -1,0 +1,66 @@
+
+  <% @suggestions.each do |suggestion| %>
+  
+    <div id="searched_suggestion_div" class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title" style="font-size: 25px;"><a href="<%= suggestion_detail_path(:id => suggestion.id) %>" style="color: white;"><%= suggestion.title %></a></h3>
+      </div>
+      <div class="panel-body">
+        <div class="stats">  
+          <% if suggestion.user_id.nil? %>
+            <span style="font-weight: bold; color: #002a80">Name: </span> --<br/>
+          <% else %>
+            <% if(User.find(suggestion.user_id).nil?) %>
+              <span style="font-weight: bold; color: #002a80">Name: </span> --<br/>
+            <% else %>
+              <span style="font-weight: bold; color: #002a80">Name: </span> 
+                <a target="_blank" style="font-size: 15px;color: dodgerblue;" href="<%= presenters_profile_show_path(:id => suggestion.user_id)%>"><%= User.find(suggestion.user_id).first_name %>
+                <%= User.find(suggestion.user_id).last_name %></a><br/>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="stats">
+          <span style="font-weight: bold; color: #002a80">Starting Bid: </span> $<%= suggestion.price %></span>&nbsp;&nbsp;|&nbsp;&nbsp; 
+          <span style="font-weight: bold; color: #002a80">Date of BrandSlip Suggestion: </span><%= suggestion.created_at.strftime("%a, %b %d, %Y") %></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+          <span style="font-weight: bold; color: #002a80">Valid For: </span><%= suggestion.valid_for.to_i -   (Date.today - suggestion.created_at.to_date).to_i %> days
+        </div>
+          <% if suggestion.suggestion_type == 1 %>
+            <div class="stats">
+              <span style="font-weight: bold; color: #002a80">Crowd Size: </span><%= suggestion.crowd_size %>
+            </div>
+          <% else %>
+            <div class="stats">
+              <span style="font-weight: bold; color: #002a80">Online Media Source: </span><%= suggestion.online_media_source %>
+            </div>
+            <div class="stats">
+              <span style="font-weight: bold; color: #002a80">Followers/Subscribers: </span><%= suggestion.followers_subscribers %>
+            </div>
+          <% end %>
+        <div class="desc">
+          <table>
+            <tr>
+              <td style="font-weight: bold; color: #002a80; vertical-align: top">Description:</td>
+              <td><%= truncate(suggestion.description, :length => 60) %></td>
+            </tr>
+          </table>
+        </div>
+
+
+        <div style="display: inline-block;margin-top: 10px">
+          <% interested_suggestion = InterestedSuggestions.where(:user_id => current_user.id, :suggestion_id => suggestion.id) %>
+          <% if !interested_suggestion.nil? && !interested_suggestion[0].nil? %>
+          <input id="btn_remove_from_interested" data-suggestion-id="<%= suggestion.id %>" type="button" class="btn btn-primary btn-mini" value="Remove from Interested" onclick="s_remove_from_interested(this)" />
+
+          <% else %>
+            <input id="btn_save_as_interested" data-suggestion-id="<%= suggestion.id %>" type="button" class="btn btn-primary btn-mini" value="Save as Interested" onclick="s_save_as_interested(this)" />
+
+          <% end %>
+        </div> 
+          
+            <div class="panel-title"  style="margin-left: 208px; margin-top: -32px; font-size: 25px;"><a href="<%= suggestion_detail_path(:id => suggestion.id) %>" class="btn btn-primary btn-mini">     Bid     </a></div>
+          
+      </div> 
+    </div>
+  <% end %> 
+

@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  proposal_details: MyText
+  proposal_cost: MyString
+  my_earning: MyString
+  is_submit_later: 1
+  is_place_mine_at_the_top: 1
+  estimate_delivery_date: 2013-08-04
+  job_id: 1
+  user_id: 1
+
+two:
+  proposal_details: MyText
+  proposal_cost: MyString
+  my_earning: MyString
+  is_submit_later: 1
+  is_place_mine_at_the_top: 1
+  estimate_delivery_date: 2013-08-04
+  job_id: 1
+  user_id: 1

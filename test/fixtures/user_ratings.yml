@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  from_user: 1
+  to_user: 1
+  job_id: 1
+  rating: 9.99
+  review: MyText
+
+two:
+  from_user: 1
+  to_user: 1
+  job_id: 1
+  rating: 9.99
+  review: MyText

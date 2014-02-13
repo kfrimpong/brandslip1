@@ -1,0 +1,59 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#users_tbl').dataTable({
+      "bJQueryUI": true,
+      "bLengthChange": false
+    });
+    $("nav ul li#menu-item-2").addClass("current-menu-item");
+  });
+</script>
+<div style=" float: right;margin-top: 10px;margin-right: 20px;">
+  <a href="admin_logout" class="btn btn-danger">Logout</a>
+</div>
+<div style="width: 1009px;" class="widget widget-table">
+  <div style="width: 200px;"class="widget-header">
+    <span class="icon-list"></span>
+    <h3 class="icon chart">Brandslip Users</h3>		
+  </div>
+  <div class="widget-content">
+    <table id="users_tbl" style="clear: both" class="table table-bordered table-hover table-striped table-condensed">
+      <thead>  
+    <tr>
+      <th><input type="checkbox" id="select_all_users" onchange=""/></th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Created On</th>
+    </tr>
+      </thead>
+      <tbody>
+    <% @users.each do |user| %>
+    <tr id="tr_<%= user.id %>">
+      <td><input id="brandslip_user" type="checkbox" value="<%= user.id %>" onchange=""/></td>
+      <td><%= user.first_name %> <%= user.last_name %></td>
+      <td><%= user.email %></td>
+      <% Rails.logger.debug "--------" %>
+      <% Rails.logger.debug user.is_approved %>
+      <% Rails.logger.debug user.is_approved == 1 %>
+      <% Rails.logger.debug user.is_approved == '1' %>
+      <% if user.is_approved == 0 %>
+        <td id="td_status" style="color:#08C">New</td>
+      <% elsif user.is_approved == 1 %>
+        <td id="td_status" style="color:green">Approved</td>
+      <% else %>
+        <td id="td_status" style="color:red">Rejected</td>
+      <% end %>
+      <td><%= user.created_at %></td>
+    </tr>
+    <% end %>
+      </tbody>
+  </table>
+</div>
+</div>
+
+<div style="padding-left: 450px">
+  <input type="button" class="btn btn-primary" value="Approve"  onclick="approve_selected_users('approve')">
+  <input type="button" class="btn btn-danger" value="Reject"  onclick="approve_selected_users('reject')">
+  <%= image_tag("loader.gif",  :id => "ajaxloading", :style => "display:none") %>
+  <span id="success_msg"></span>
+</div>

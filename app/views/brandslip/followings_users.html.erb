@@ -1,0 +1,47 @@
+<div class="container" style="margin-top: 20px">
+  <div class="span3"></div>
+  <div class="span6"><b>Total Followings:</b> <%= current_user.followeds.count %></div>
+  <div class="span3"></div>
+</div>
+<div class="container" style="margin-top: 20px">
+<% @followings.each do |users| %>
+    <div class="span3"></div>
+    <div class="span6" style="border: 2px solid dimgrey;padding: 15px 15px 13px;font-size: 13px;margin-top: 20px;height: auto;">
+      <div style="width: 100%;float: left; padding-right: 10px;font-size: 15px">
+          <div style="width:30%;float: left;padding-left: 10px;">
+            <span style="font-size: 15px; color: royalblue"></span>
+            <span>
+              <% if users.image? %>
+                <%= image_tag users.image_url, :size =>"90x90"  %>
+              <% else %>
+                <%= image_tag "no_image.png", :size =>"90x90"  %>
+              <% end %>
+          </div>
+          <div style="width: 70%;float: left">
+            <table>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 100px;">Company: </td>
+                <td><%= users.company_name %></td>
+              </tr>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 100px;">Full Name: </td>
+                <td><%= users.first_name %> <%= users.last_name %></td>
+              </tr>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 100px;">Interest: </td>
+                <td><%= users.interest.nil? ? "--" : Jobcategorymaster.find(users.interest).category %></td>
+              </tr>
+              <tr>
+                <td style="font-size: 15px; color: royalblue;width: 100px;vertical-align: top">Description: </td>
+                <td><%= users.description %></td>
+              </tr>
+            </table>
+          </div>        
+      </div>
+      <div style="padding-top: 10px;margin-left: 40%;display: inline-block">
+        <a href="<%= presenters_profile_show_path(:id => users.id)%>" class="btn btn-primary btn-mini">Visit Profile</a>
+      </div>
+    </div>
+    <div class="span3"></div>
+  <% end %>
+</div>

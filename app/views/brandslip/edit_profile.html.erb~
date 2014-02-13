@@ -1,0 +1,428 @@
+<script src="/assets/jquery.form.js?body=1" type="text/javascript"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    
+        
+    $.fn.raty.defaults.path = '/assets/ratings';
+    $('#star').raty({      
+      precision: true,
+      score: function() {
+          return $(this).attr('data-score');
+      }
+    }); 
+    
+    <% if !session[:is_complete_profile].nil? && !session[:is_complete_profile] %>
+          $("#btn_complete_profile").click()
+    <% end %> 
+
+    $('.datepicker').datepicker();
+    //Submit form Ajax  
+    $('.edit_profile').ajaxForm({
+      dataType: 'json',
+      beforeSubmit: function() {
+        $("#edit_profile_ajaxloading").css('display', 'inline-block');
+        var submit = true;
+        var empty_boxes = [];
+        $("input[type='text']:not('.not_required')").each(function(){
+          if($(this).val() == ""){
+            empty_boxes.push($(this).prev('span').text().replace(':', ''));
+            submit = false;
+          }
+        });
+          
+        $("textarea").each(function(){
+          if($(this).val() == ""){
+            empty_boxes.push("Description");
+            submit = false;
+          }
+        });
+        if($("select#user_interest").val() == ""){
+          empty_boxes.push("Interest");
+          submit = false;
+        }
+                
+        if(submit == false){
+          $("#edit_profile_ajaxloading").css('display', 'none');
+          alert("Please enter " + empty_boxes.join(', ') +" fields...");
+          return false;
+        }            
+          
+      },      
+      success: function(html_source) {
+        $("#edit_profile_ajaxloading").css('display', 'none');
+        $("span#edit_profile_success_msg").text("Profile edited successfully...").css('color', 'green');
+        return false;
+      }
+    });
+      
+  });     
+</script>
+
+<div class="container">  
+  <div class="row" style="margin-top: 10px">
+    <a style="display: none" id="btn_complete_profile" data-toggle="modal" href="#myModalCompleteProfile"></a>
+    <div class="bs-example bs-example-tabs">
+      <ul id="myTab" class="nav nav-tabs">
+        <li class=""><a href="#edit_profile" data-toggle="tab">Edit Profile</a></li>
+        <li class=""><a href="#edit_account_detail" data-toggle="tab">Edit Account Details</a></li>        
+        <%#*<li class=""><a href="#view_profile" data-toggle="tab">View Profile</a></li>%>        
+        <li class=""><a href="#view_profile "data-toggle="tab">View Profile</a></li>        
+      </ul>
+      <div id="myTabContent" class="tab-content">
+        <!-- Edit Profile Section -->
+        <div class="tab-pane fade active in" id="edit_profile">
+          <div>
+            <%= form_for @users, :url => save_user_path, :html => { :class => 'form-horizontal edit_profile',  :multipart => true } do |f| %>
+
+              <div style="text-align: center;margin-bottom: 10px;margin-top: 25px">
+                <span style="font-size: 35px;display: inline-block;margin-bottom: 25px;">Edit Profile</span><br/>
+                <%= image_tag @users.image_url, :size =>"150x150" if @users.image? %>
+              </div>
+              <div style="margin-left: 30%;margin-bottom: 10px;">
+                <span style=" display: inline-block; padding-left: 110px">
+                  <%= f.file_field :image, :size => 34, :style => "display:inline-block;width:186px" %><span style="color: gray;"> (Image size limit 20X20)</span>
+                </span>
+              </div>
+              <div style="margin-left: 30%;margin-bottom: 10px">
+                <span style="width: 100px;display: inline-block">First Name:</span> <%= f.text_field :first_name, :placeholder => "First Name", :class => 'text_field', :size =>30, :maxlength => 50 %></br></br>
+                <span style="width: 100px;display: inline-block">Last Name: </span><%= f.text_field :last_name, :placeholder => "Last Name", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Company: </span><%= f.text_field :company_name, :placeholder => "Company Name", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Email: </span><%= f.text_field :email, :placeholder => "Email", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Date of birth: </span><%= f.text_field :dob, :placeholder => "Dte of Birth", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">LinkedIn: </span><%= f.text_field :linkedin, :placeholder => "www.linkein.com", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Twitter: </span><%= f.text_field :twitter, :placeholder => "www.twitter.com", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Facebook: </span><%= f.text_field :facebook, :placeholder => "www.facebook.com", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <% if @users.user_type == 1 %>
+                <span style="width: 100px;display: inline-block">Website Title: </span><%= f.text_field :website_title, :placeholder => "Brandslip", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Website: </span><%= f.text_field :website, :placeholder => "Personal website", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <% else %>
+                <span style="width: 100px;display: inline-block">Website Title: </span><%= f.text_field :website_title, :placeholder => "Brandslip", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Website: </span><%= f.text_field :website, :placeholder => "Personal website", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <% end %>
+                <span style="width: 100px;display: inline-block">Interest: </span>
+                <%= f.select :interest, Jobcategorymaster.all.collect{|s| [s.category, s.id]}, {:include_blank => "Select Interest"}, :class => "selectpicker" %><br/><br/>
+                <span style="width: 100px;display: inline-block">Press title: </span><%= f.text_field :press_title, :placeholder => "Add Press title", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">press: </span><%= f.text_field :press, :placeholder => "Add Press", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Description: </span><span><%= f.text_area :description, :placeholder => "Small Description", :rows => 3, :cols =>40 %></span><br/>
+              </div> 
+              <% if @users.user_type == 2 %>
+                <span style="margin-left: 40%;margin-bottom: 10px; padding-left: 45px; color: grey">Two minutes Video about yourself</span><br/>
+                <div style="margin-left: 40%;margin-bottom: 10px; padding-left: 58px">
+                  <button class="btn btn-large">Upload your Video</button>
+                </div>
+              <% end %>
+              <div style="margin-left: 40%;margin-bottom: 10px; padding-top: 8px; padding-left: 114px">
+                <%= f.submit "Update", :class => 'btn btn-primary btn-small' %>
+                <%= image_tag("loader.gif",  :id => "edit_profile_ajaxloading", :style => "display:none") %>
+                <span id="edit_profile_success_msg"></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Account Detail Section -->
+        <div class="tab-pane fade in" id="edit_account_detail">
+          <div style="padding-left: 50px; text-align: center">
+  <h2>Charge a Brand on behalf of a Presenter</h2>
+  <%= form_tag({:controller => 'payments', :action => 'debit', :method => 'post'},{:id => 'debit'}) do %>
+    <fieldset style="border:1px solid; padding:10px;">
+      <div>Charge this Brand:</div>
+      <div class="control-group">
+                  <%= label_tag(:brand, 'Brand') %>
+              <%= select_tag(:brand, options_for_select(@brands.map{ |brand| [brand.first_name,brand.id] }), :id => 'debit-brand') %>
+      </div>
+      <div>on behalf of this presenter:</div>
+      <div class="control-group">
+                  <%= label_tag(:presenter, 'Presenter') %>
+              <%= select_tag(:presenter, options_for_select(@presenters.map{ |presenter| [presenter.first_name,presenter.id] }), :id => 'debit-presenter') %>
+      </div>
+      <div class="control-group">
+                  <%= label_tag(:amount, 'Amount in whole dollars (e.g. 5 or 50)') %>
+              <%= text_field_tag(:amount) %>
+      </div>
+      <div class="control-group">
+                  <%= label_tag(:appears_on_statement_as, 'Appears on Statment as(18 character limit)') %>
+              <%= text_field_tag(:appears_on_statement_as) %>
+      </div>
+      <div class="actions">
+        <%= submit_tag("Charge Brand", :id => 'charge_brand') %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>
+          <div style="padding-left: 50px; text-align: center">
+  <h2>Payout a Presenter</h2>
+  <%= form_tag({:controller => 'payments', :action => 'credit', :method => 'post'},{:id => 'credit'}) do %>
+    <fieldset style="border:1px solid; padding:10px;">
+      <div>Payout this Presenter:</div>
+      <div class="control-group">
+                  <%= label_tag(:presenter, 'Presenter') %>
+              <%= select_tag(:presenter, options_for_select(@presenters.map{ |presenter| [presenter.first_name,presenter.id] }), :id => 'debit-presenter') %>
+      </div>
+      <div class="control-group">
+                  <%= label_tag(:amount, 'Amount in whole dollars(e.g. 5 or 50)') %>
+              <%= text_field_tag(:amount) %>
+      </div>
+      <div class="control-group">
+                  <%= label_tag(:appears_on_statement_as, 'Appears on Statment as(14 character limit)') %>
+              <%= text_field_tag(:appears_on_statement_as) %>
+      </div>
+      <div class="actions">
+        <%= submit_tag("Payout Presenter", :id => 'payout_presenter') %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>
+        </div>
+
+        
+        
+        
+        <div class="tab-pane fade in" id="view_profile">
+          
+          <link rel="stylesheet" type="text/css" href="/assets/reset.min.css">
+          <link rel="stylesheet" type="text/css" href="/assets/d_green.css" class="main-stylesheet">
+
+          <!-- google fonts-->
+          <link href="http://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900,900italic" rel="stylesheet" type="text/css">
+
+          <div class="container-left">
+            <div class="container-left-picture">
+              <!-- Your profile picture -->
+              <% if current_user.image? %>
+                <%= image_tag current_user.image_url, :size =>"250x250", :class => "avatar"  %>
+              <% else %>
+                <%= image_tag "no_image.png", :size =>"250x250", :class => "avatar" %>
+              <% end %>
+              <!-- Social media links -->
+              <ul class="navigation">
+                <li><a href="#about"><span class="icon-user"></span></a></li>
+                <li><a href="#portfolio"><span class="icon-docs"></span></a></li>
+                <li><a href="#contact"><span class="icon-mail"></span></a></li>
+              </ul>
+              <ul class="social-media">
+                <li>
+                  <% if !current_user.facebook.nil? %>
+                    <a href="//<%= current_user.facebook %>" target="_blank"><span class="icon-facebook"></span></a>
+                  <% else %>
+                    <a href="http://facebook.com" target="_blank"><span class="icon-facebook"></span></a>
+                  <% end %>
+                </li>
+                <li>
+                  <% if !current_user.twitter.nil? %>
+                    <a href="//<%= current_user.twitter %>" target="_blank"><span class="icon-twitter"></span></a>
+                  <% else %>
+                    <a href="http://twitter.com" target="_blank"><span class="icon-twitter"></span></a>
+                  <% end %>
+                </li>
+                <li>
+                  <% if !current_user.twitter.nil? %>
+                  <a href="//<%= current_user.linkedin %>" target="_blank"><span class="icon-linkedin"></span></a>
+                  <% else %>
+                  <a href="http://linkedin.com" target="_blank"><span class="icon-linkedin"></span></a>
+                  <% end %>          
+                </li>
+              </ul>
+            </div>
+
+            <!-- Personal facts -->
+
+            <div class="container-left-info">
+              <ul class="container-left-info-tabs">
+                <li>	
+                  <ul class="personal-info">
+                    <li><span>Name:</span><span><%= current_user.user_type == 1 ? current_user.company_name.capitalize : (current_user.first_name.capitalize + " " + current_user.last_name.capitalize) %></span></li>
+                    <li><span>Interest:</span><span><%= current_user.interest.nil? ? "--" : Jobcategorymaster.find(current_user.interest).category %></span></li>
+                    <li><span>Website:</span><a href="//<%= current_user.website %>" target="_blank"><span><%= current_user.website %></span></a></li>
+                    <li><span>Rating: <%= number_with_precision(@avg_rating, :precision => 1) %></span><div id="star" data-score="<%=  @avg_rating %>"></div></li>
+                  </ul>
+                </li>	
+              </ul>	
+            </div>
+          </div>
+          <!-- Content for right container -->
+
+          <div class="container-right">
+            <div class="show-info-mobile"><span class="icon-menu"></span></div>
+            <ul class="tab-list">
+              <li class="tab-about">
+                <div class="grid">
+                  <div class="row">
+                    <!-- Name + Introduction -->	
+                    <h1 class="site-title"><a name="about"><%= current_user.user_type == 1 ? current_user.company_name.capitalize : (current_user.first_name.capitalize + " " + current_user.last_name.capitalize) %></a></h1>
+                    <div class="g-1">
+                      <p class="introduction"><%= current_user.description %></p>
+                    </div>
+                  </div>
+                  <div class="row">
+
+                    <!-- Education -->
+                    <div class="g-1">
+                      <h3 class="sub-heading">Reviews:</h3>
+                      <ul class="education">
+                        <% UserRating.where(:to_user => current_user.id).each do |user| %>
+                          <li>
+                            <div class="station"><%= user.review %></div>
+                          </li>
+                        <% end %>
+                      </ul>
+
+                    </div>
+
+                  </div>
+
+                  <!-- Skill section -->
+
+                  <div class="row">
+
+                    <div class="g-1">
+
+                      <h3 class="sub-heading">Press:</h3>
+
+                      <p style="margin-top: 10px;margin-left: 5px;font-size: 15px;"><a href="//<%= current_user.press %>" target="_blank"><span><%= current_user.press %></span></a>
+                      <!-- Alternative skill showcase -->
+
+                    </div>
+
+                  </div>	
+
+                </div>
+
+              </li>
+
+              <li class="tab-portfolio">
+
+                <div class="grid">
+
+                  <div class="row">
+
+                    <!-- Portfolio -->
+
+                    <h2 class="sub-title"><a name="portfolio">Portfolio:</a></h2>
+
+                    <p class="portfolio-intro">This is a selection of my latest work.<br>Click on the images to see the enlarged version or follow the links in the description to see my work "live".</p>
+
+                    <div class="g-1">
+
+                      <div class="portfolio-item">
+
+                        <div class="portfolio-preview"><a class="fancybox" href="/assets/portfolio/portfolio_item.jpg"><img class="portfolio-img" src="/assets/portfolio/portfolio_item.jpg" alt=""><div class="mask"><span class="icon-search"></span></div></a></div>
+
+                        <div class="portfolio-desc">
+
+                          <h4 class="portfolio-item-title">UFK</h4>
+
+                          <p class="portfolio-desc-text">A short text that describes your work. What you did there and why you did it. Optional you can add a link for more information.</p>
+
+                          <a class="button-view-project" href="">view project <span class="icon-forward"></span></a>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+
+                    <div class="g-2">	
+
+                      <div class="item-small portfolio-item">
+
+                        <div class="portfolio-preview"><a class="fancybox" href="/assets/portfolio/portfolio_item.jpg"><img class="portfolio-img" src="/assets/portfolio/portfolio_item.jpg" alt=""><div class="mask"><span class="icon-search"></span></div></a></div>
+
+                        <div class="portfolio-desc">
+
+                          <h4 class="portfolio-item-title">Think More</h4>
+
+                          <p class="portfolio-desc-text">Alternativ layout...</p>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="g-2">
+
+                      <div class="item-small portfolio-item">
+
+                        <div class="portfolio-preview"><a class="fancybox" href="/assets/portfolio/portfolio_item.jpg"><img class="portfolio-img" src="/assets/portfolio/portfolio_item.jpg" alt=""><div class="mask"><span class="icon-search"></span></div></a></div>
+
+                        <div class="portfolio-desc">
+
+                          <h4 class="portfolio-item-title">Space</h4>
+
+                          <p class="portfolio-desc-text">...with less text</p>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+
+                    <div class="g-1">
+
+                      <div class="portfolio-item">
+
+                        <div class="portfolio-preview"><a class="fancybox" href="/assets/portfolio/portfolio_item.jpg"><img class="portfolio-img" src="/assets/portfolio/portfolio_item.jpg" alt=""><div class="mask"><span class="icon-search"></span></div></a></div>
+
+                        <div class="portfolio-desc">
+
+                          <h4 class="portfolio-item-title">Planes</h4>
+
+                          <p class="portfolio-desc-text">You can work with thumbnails as well!</p>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </li>
+
+            </ul>
+
+          </div>
+          <!-- including js -->
+          <script id="twitter-wjs" src="http://platform.twitter.com/widgets.js"></script>
+          <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+          <script type="text/javascript" src="/assets/gmap3.min.js"></script>
+          <script type="text/javascript" src="/assets/additional-scripts.min.js"></script>
+          <script type="text/javascript" src="/assets/profile_custom.js"></script>
+          <script type="text/javascript" src="/assets/profile.js"></script>
+
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>  
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModalCompleteProfile">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Complete your profile</h4>
+      </div>
+      <div class="modal-body">
+        Please update your profile and account details before continue....
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

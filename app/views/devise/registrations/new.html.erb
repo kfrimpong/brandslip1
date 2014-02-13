@@ -1,0 +1,112 @@
+<script type="text/javascript">
+  $( document ).ready(function() {
+    $('.datepicker').datepicker({dateFormat: "dd-mm-yy", changeMonth: true, changeYear: true, yearRange: 'c-62'});;
+    var type_of_user_width = $("#date_of_birth").css('width').replace('px', '');
+    type_of_user_width = parseInt(type_of_user_width) + 45;
+    type_of_user_width = type_of_user_width + "px";
+    $("#user_type_select").css('width', type_of_user_width);
+    
+    $("form#new_user").submit(function(){
+      var submit = true;
+      var empty_boxes = [];
+      $("input[type='text']:not('.not_required'), input[type='password']").each(function(){
+          if($(this).val() == ""){
+            empty_boxes.push($(this).attr('placeholder'));
+            submit = false;
+          }
+      });
+      if($("select#user_type_select").val() == "1"){
+        if($("#user_company_name").val() == ""){
+            empty_boxes.push('Company Name');
+            submit = false;
+        }
+      }
+      
+      if($("select#user_type_select").val() == "Select User Type"){
+        empty_boxes.push("User Type");
+        submit = false;
+      }
+        
+      if(submit == false){
+        $("#edit_profile_ajaxloading").css('display', 'none');
+        alert("Please enter " + empty_boxes.join(', ') +" fields...");
+        return false;
+      }  
+
+
+    });
+  });
+</script>
+
+
+
+<div class="navbar navbar-inverse" style="margin-bottom: 0px">
+ 
+  <div class="container">
+    <a class="navbar-brand brand" style="color:yellow" href="<%= home_path %>">BrandSlip</a>
+    <div class="nav-collapse collapse navbar-inverse-collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="<%= new_user_registration_path %>">Signup</a></li>
+        <li><a href="<%= new_user_session_path %>">Signin</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="<%= new_contact_u_path %>">Contact Us</a></li>
+    </div> 
+  </div>
+  
+</div>
+
+<div>
+  <div class="signuplogo" style="padding-top: 50px;padding-bottom: 25px;text-align: center;">Brandslip</div>
+  <div style="padding-left: 35%">
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="user_first_name" name="user[first_name]" type="text" class="form-control input-large" placeholder="First Name">
+      </div>  
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="user_last_name" name="user[last_name]" type="text" class="form-control input-large" placeholder="Last Name">
+      </div> 
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="user_email" name="user[email]" type="email"  class="form-control input-large" placeholder="Email Username">
+      </div>  
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="user_password" name="user[password]" type="password" class="form-control input-large" placeholder="Password">
+      </div>  
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="user_password_confirmation" name="user[password_confirmation]" type="password" class="form-control input-large" placeholder="Confirm Password">
+      </div> 
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="user_company_name" name="user[company_name]" type="text" class="form-control input-large not_required" placeholder="Company Name">
+      </div>      
+      <div class="input-group">
+        <span class="input-group-addon input-large">@</span>
+        <input id="date_of_birth" name="user[dob]" type="text" class="form-control input-large datepicker"
+               placeholder="Date of Birth"  />
+      </div>   
+      <br/>
+      <div style="" class="input-group" >
+        <select id="user_type_select" name="user[user_type]" style="width: 200%;height: 49px;padding-left: 150px;">
+          <option>Select User Type</option>
+          <option value="1"><em>Brand</em> </option>
+          <option value="2">Presenter</option>
+        </select>
+      </div>
+      <br/>
+      <div style="margin-top: 15px" >
+        <input name="commit" style="width: 53%" class="btn btn-primary btn-large" type="submit" value="Create an account">
+      </div>
+    <% end %>
+    <div style="text-align: center;width: 53%;margin-top: 10px;">
+      <span>Have an account?</span> <a href="/users/sign_in">Sign in</a>
+    </div>
+  </div>   
+</div>
+ 

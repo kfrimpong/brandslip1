@@ -1,0 +1,14 @@
+
+
+#text_area{
+    width: 300px;
+    height: 140px;
+}
+
+#contact_head{
+    text-align: center;
+    font-size: 39px;
+    color: brown;
+    padding-bottom: 50px;
+    padding-top: 50px;
+}

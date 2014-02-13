@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="https://js.balancedpayments.com/v1/balanced.js"></script>
+  <title>Brandslip</title>
+  <%= stylesheet_link_tag "application", "brandslip", "contact_us","landing", "bootstrap-responsive", "bootstrap-responsive.min", "bootstrap", "dashboard", "jobs", "d_green", :media => "all" %>
+  <%= javascript_include_tag "application", "jquery","jquery-1.8.2", "jquery-ui.min", "jquery.dataTables", "all", "bootstrap", "bootstrap-datepicker", "jquery.raty.min" %>
+  <%= csrf_meta_tags %>
+  <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>
+  <link rel="icon" type="image/gif" href="/assets/favicon.png">
+  <script type="text/css">
+
+
+
+  </script>
+
+
+      <script type="text/javascript">
+      var secret = "<%=APP_CONFIG['balanced_marketplace'] %>";
+      var uri = "/v1/marketplaces/" + secret;
+      balanced.init(uri);</script>
+</head>
+<body class="">
+  <%= javascript_tag do %>
+    var dashboard_path = <%= dashboard_url.to_json.html_safe %>;
+  <% end %>   
+  <div id="wrap">
+    <div class="container-liquid">
+      <div class="navbar navbar-inverse top-navigation" style="padding: 0px; margin-bottom: 0px; background-color: #468FD3;font-size: 14px; border-radius: 0">
+        
+        <div class="span3" style="background-color: #3473A8; font-size: 30px; margin-left: 0;">
+          <a class="navbar-brand brand" style="color:white; margin: 0 auto; float: none" href="<%= dashboard_path %>">BrandSlip home</a>
+        </div>
+
+        <div class="nav-collapse collapse navbar-inverse-collapse">
+          <ul class="nav navbar-nav navbar-left">
+            <% if current_user.user_type == 1 %>
+              <li>
+                <a href="#">
+                  <span class="icon-search"></span> Find BrandSlips<span class="caret"></span>
+                </a>
+                <ul>
+                  <li><a href="<%= search_job_path(:job_type => 'public_speaking') %>">Search for Public Speaking BrandSlips</a></li>
+                  <li><a href="<%= search_job_path(:job_type => 'online') %>">Search for Online BrandSlips (Youtube, Vine, Instagram)</a></li>
+                </ul>
+              </li>
+            <% end %>
+            <% if current_user.user_type == 2  %>
+              <li>
+                <a href="#">
+                  <span class="icon-mail"></span> Post Your BrandSlip<span class="caret"></span>
+                </a>
+                <ul>
+                  <li><a href="<%= new_job_path(:type => 'public_speaking') %>">Public Speaking BrandSlip</a></li>
+                  <li><a href="<%= new_job_path(:type => 'online') %>">Online BrandSlip</a></li>
+                </ul>
+              </li>
+            <% end %>
+
+            <% if current_user.user_type == 1 %>
+              <li>
+                <a href="#"><span class="icon-mail"></span> Post Your BrandSlip Suggestion<span class="caret"></span></a>
+                <ul >
+                  <li><a href="<%= new_brandslip_suggestion_path(:type => 'public_speaking') %>">Public Speaking BrandSlip Suggestion</a></li>
+                  <li><a href="<%= new_brandslip_suggestion_path(:type => 'online') %>">Online BrandSlip Suggestion (Youtube, Vine, Instagram)</a></li>
+                </ul>           
+              </li>
+            <% elsif current_user.user_type == 2 %>
+              <li>
+                <a href="#"><span class="icon-search"></span> Find BrandSlip Suggestions<span class="caret"></span></a>
+                <ul>
+                <li><a href="<%= search_suggestion_path(:type => 'public_speaking') %>">Public Speaking BrandSlip Suggestions</a></li>
+                <li><a href="<%= search_suggestion_path(:type => 'online') %>">Online BrandSlip Suggestions</a></li>
+                </ul>           
+              </li>
+            <% end %>
+
+            <% if current_user.user_type == 1 %>
+              <li id="brandslip_profile"><a href="<%= presenter_profile_path %>"><span class="icon-user"></span> Influencer profiles search</a></li>
+            <% elsif current_user.user_type == 2 %>
+              <li id="brandslip_profile"><a href="<%= brand_profile_path %>"><span class="icon-user"></span> Brands Profiles</a></li>
+            <% end %>
+
+            <li id="contact_us"><a href="<%= contact_us_page_path %>">Contact Us</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right pull-right">
+            <li>
+              <a href="<%= edit_profile1_path %>">
+                <%= current_user.first_name.capitalize %> <%= current_user.last_name.capitalize %><span class="caret"></span>
+              </a>
+              <ul>
+                <li><a href="<%= edit_profile1_path %>">Edit Profile</a></li>
+                <li><a href="<%= review_path %>">Reviews</a></li>
+                <li><a href="<%= transaction_history_path %>">Transaction History</a></li>
+                <% if current_user.user_type == 1 %>
+                  <li><a href="<%= interested_brandslips_path %>">BrandSlips I’m Interested In</a></li>
+                <% elsif current_user.user_type == 2 %>
+                  <li><a href="<%= interested_suggestions_path %>">BrandSlip Suggestions I’m Interested In</a></li>
+                <% end %>
+              </ul>
+            </li>
+            <li>
+              <a class="btn-danger" href="<%= destroy_user_session_path %> ">Logout</a>
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+    </div>
+    <%= yield %>
+  </div>
+ 
+  <div id="footer" class="footer" style="width: 100%;background-color:#418BCA;font-size: 11px; position:  relative ! important; bottom: 0; left: 0; -webkit-transform: translateZ(0); float: right ! important;  margin-top: 10px;">
+    <div class="container" >
+      <div style="text-align: center; color: white; padding-top: 15px;font-size: 13px"class="container">
+        <span><a style="color: white;text-decoration: none" href="<%= contact_us_page_path %>">Contact Us</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span><a style="color: white;text-decoration: none" href="<%= our_team_path  %>">Our Team</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span><a style="color: white;text-decoration: none" href="<%= faq_path  %>">FAQ</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span><a style="color: white;text-decoration: none" href="<%= terms_conditions_path %>">Terms</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span><a style="color: white;text-decoration: none" href="<%= policies_path %>">Privacy Policies</a></span>&nbsp;&nbsp;
+        <span id=""><a href="//www.facebook.com/brandslip" target="_blank"><img src = "/assets/facebook_w.png" size = "25X25" style="width: 25px"/></a></span>
+        <span id=""><a href="//www.twitter.com/brandslip" target="_blank"><img src = "/assets/twitter_w.png" size = "30x30" style="width: 30px"/></a></span>
+      </div> 
+    </div>
+  </div>   
+</body>
+</html>

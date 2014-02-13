@@ -1,0 +1,70 @@
+<%= form_for(@user_suggestion_proposal) do |f| %>
+  <% if @user_suggestion_proposal.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user_suggestion_proposal.errors.count, "error") %> prohibited this user_suggestion_proposal from being saved:</h2>
+
+      <ul>
+      <% @user_suggestion_proposal.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div style="font-size: 34px;padding-top: 15px;padding-bottom: 10px;margin-right: 50px;">
+    Description of your bid
+  </div>
+  <div class="field">
+
+    <%= f.label :proposal_details %><br />
+    <li>Please do not include contact info.</li>
+    <li>Please be as descriptive as possible and provide multiple avenues for collaboration to occur. </li>
+    <%= f.text_area :proposal_details, :class => 'pro_fields', :id => 'pro_details', :cols => '50%', :rows => 5  ,:style=>"width: 416px;" %>
+  </div>
+  <br></br>
+  <div class="field">
+    <%= f.label :proposal_cost %><br />
+    $&nbsp;<%= f.text_field :proposal_cost, :class => 'pro_fields', :placeholder => ' 1000'  %>
+  </div>
+  <br></br>
+  <%= f.hidden_field :user_id, :value => current_user.id %>
+  <%= f.hidden_field :suggestion_id, :value => params[:id] %>
+  <div style="padding-bottom: 15px">
+    <input type="checkbox" class="chk_terms_and_cond" name="checkbox"/>&nbsp;
+    By clicking Bid you agree to the 
+    <a style="text-decoration: underline" href="<%= terms_conditions_path %>" target=" _blank" >
+      Terms/Privacy </a>and
+    <a style="text-decoration: underline" href="<%= policies_path %>" target=" _blank" >
+        BrandSlip Marketplace Policies.</a>
+  </div>
+  <div class="actions" id = "sub_pro">
+    <%= f.submit "Bid", :class=> 'btn btn-primary btn-mini' %>  
+    <br></br>  
+  </div>
+  <span style="color: #808080">Bids are only shown to Brand.</span>
+<% end %>
+  
+  
+  
+  <a style="display: none" id="btn_job_err_msg" data-toggle="modal" href="#myModalUserErrorMsg"></a>
+
+<!-- Modal -->
+<div class="modal fade" id="myModalUserErrorMsg">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Error Message:</h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+  
+  

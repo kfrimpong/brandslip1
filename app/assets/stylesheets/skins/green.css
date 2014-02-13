@@ -1,0 +1,37 @@
+/*-----------------------------------------------------
+-------------        COLOURS         ------------
+-----------------------------------------------------*/
+
+ul.skills li .background > div,
+header.main.fixed,
+article.post aside,
+ul.share li:hover,
+ul.tags li a,
+article.portfolio .mask,
+section.portfolio-single .portfolio-back,
+section.portfolio-single .portfolio-next,
+section.portfolio-single .portfolio-prev,
+section.blog-single .blog-back,
+section.blog-single .blog-next,
+section.blog-single .blog-prev,
+section.pricing .package.recommended header,
+input[type='submit'],
+section.why-us,
+article.portfolio .text a.more  {
+	background-color:#569E80;
+}
+
+article.post header p.meta a,
+ul.share li a i,
+article.comment header p.date,
+aside.sidebar .recent .post .meta,
+aside.sidebar .categories li span.count,
+aside.sidebar .archives li span.count,
+section.portfolio-single .portfolio-next,
+section.portfolio-single .portfolio-prev,
+article.blog-item .meta span.date,
+article.blog-item .meta a,
+section.features i[class*="icon"],
+section.features h2 {
+	color:#569E80;
+}

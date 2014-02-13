@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  job_title: MyString
+  job_description: MyText
+  job_category: 1
+  job_sub_category: 1
+  job_skill: MyString
+  job_price_type: 1
+  job_price_hour_range: MyString
+  job_price_fixed_type: MyString
+  job_valid_for: MyString
+  job_start_date: 2013-08-04
+
+two:
+  job_title: MyString
+  job_description: MyText
+  job_category: 1
+  job_sub_category: 1
+  job_skill: MyString
+  job_price_type: 1
+  job_price_hour_range: MyString
+  job_price_fixed_type: MyString
+  job_valid_for: MyString
+  job_start_date: 2013-08-04

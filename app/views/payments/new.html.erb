@@ -1,0 +1,51 @@
+<div style="padding-left: 50px; text-align: center">
+  <h2>Charge a Brand on behalf of a Presenter</h2>
+  <%= form_tag({:controller => 'payments', :action => 'debit', :method => 'post'},{:id => 'debit'}) do %>
+    <fieldset style="border:1px solid; padding:10px;">
+      <div>Charge this Brand:</div>
+      <div class="control-group">
+                  <%= label_tag(:brand, 'Brand') %>
+              <%= select_tag(:brand, options_for_select(@brands.map{ |brand| [brand.first_name,brand.id] }), :id => 'debit-brand') %>
+      </div>
+      <div>on behalf of this presenter:</div>
+      <div class="control-group">
+                  <%= label_tag(:presenter, 'Presenter') %>
+              <%= select_tag(:presenter, options_for_select(@presenters.map{ |presenter| [presenter.first_name,presenter.id] }), :id => 'debit-presenter') %>
+      </div>
+      <div class="control-group">
+                  <%= label_tag(:amount, 'Amount in whole dollars (e.g. 5 or 50)') %>
+              <%= text_field_tag(:amount) %>
+      </div>
+      <div class="control-group">
+                  <%= label_tag(:appears_on_statement_as, 'Appears on Statment as(18 character limit)') %>
+              <%= text_field_tag(:appears_on_statement_as) %>
+      </div>
+      <div class="actions">
+        <%= submit_tag("Charge Brand", :id => 'charge_brand') %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>
+<div style="padding-left: 50px; text-align: center">
+  <h2>Payout a Presenter</h2>
+  <%= form_tag({:controller => 'payments', :action => 'credit', :method => 'post'},{:id => 'credit'}) do %>
+    <fieldset style="border:1px solid; padding:10px;">
+      <div>Payout this Presenter:</div>
+      <div class="control-group">
+                  <%= label_tag(:presenter, 'Presenter') %>
+              <%= select_tag(:presenter, options_for_select(@presenters.map{ |presenter| [presenter.first_name,presenter.id] }), :id => 'debit-presenter') %>
+      </div>
+      <div class="control-group">
+                  <%= label_tag(:amount, 'Amount in whole dollars(e.g. 5 or 50)') %>
+              <%= text_field_tag(:amount) %>
+      </div>
+      <div class="control-group">
+                  <%= label_tag(:appears_on_statement_as, 'Appears on Statment as(14 character limit)') %>
+              <%= text_field_tag(:appears_on_statement_as) %>
+      </div>
+      <div class="actions">
+        <%= submit_tag("Payout Presenter", :id => 'payout_presenter') %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>

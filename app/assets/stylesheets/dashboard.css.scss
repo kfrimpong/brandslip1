@@ -1,0 +1,190 @@
+body, h1, h2, h3 {
+	font-family: 'Lato', sans-serif!important;
+}
+input[type="checkbox"] {
+	width: 30px;
+}
+.btn {
+	border: 0;
+}
+#wrap {
+	min-height: 100vh;
+}
+.main-row {
+	overflow: hidden; 
+
+	#menubar {
+		margin-left: 0; 
+		background-color: #34495e; 
+		margin-bottom: -99999px; 
+		padding-bottom: 99999px;
+	}
+	#main-content {
+		margin: 0;
+		padding: 20px;
+		min-height: 90vh;
+		ul {
+			margin: 0;
+			padding: 0;
+
+			li {
+				border: 0px;
+				background: #ecf0f5;
+				padding: 16px;
+
+				.post_bid_div {
+					border: 0px;
+					padding: 0;
+				}
+
+				h2 {
+					margin: 0;
+				}
+			}
+		}
+
+		.box-bottom-bar {
+			padding-top: 10px; 
+			width: 100%; 
+			display: table; 
+			position: relative;
+
+			.info {
+				float: left;
+				border-left: 1px solid #ccc;
+				padding: 0 10px;
+				h3 {
+					margin: 0;
+				}
+				p {
+					margin: 0;
+					color: #7F8C8D;
+				}
+			}
+			.first {
+				border: 0;
+				padding-left: 0;
+			}
+			.highlight h3 {
+				color: #F39C12;
+			}
+
+			.button-bar {
+				position: absolute; 
+				right: 0; 
+				bottom: 0;
+			}
+		}
+	}
+}
+.side-nav {
+	margin-top:20px;
+	li {
+		a{
+			color:#fff;
+		}
+		a:hover {
+			background: #16a085;
+		}
+	}
+	.active {
+		background: #16a085;
+	}
+}
+.top-navigation {
+	.nav li ul {
+		padding-left: 0;
+	}
+
+	.navbar-left li {
+		border-right: 1px solid #559FDE;
+	}
+
+	.navbar-left li a:hover {
+		background-color: #3473A8;
+		color: #2ECC71;
+	}
+
+	.navbar-left .active a {
+		background-color: #3473A8;
+	}
+
+	.navbar-right li ul {
+		left: -70px;
+	}
+
+	.navbar-right li ul:before {
+		left: 105px;
+	}
+}
+#tabs {
+	border: 0px;
+	li {
+		width: 100%;
+		a {
+			border: 0px;
+			border-radius: 0;
+			margin: 0;
+		}
+	}
+	.active a {
+		background: #16a085;
+		color: #fff;
+	}
+}
+.well-white {
+	background: #fff;
+}
+.msg-title{
+	display:block;
+	background:#418BCA;
+	color:white;
+	font-weight:bold;
+	text-align:left;
+	padding: 5px;
+}
+.unstyled {
+	margin-top:10px;
+	> li {
+		list-style-type: none;
+		.from_user{
+			display: block;
+			color: black;
+		}
+		.subject{
+			display: block;
+		}
+		.message_body{
+			padding:5px;
+			font-style: italic;
+		}
+	}
+}
+
+// ------------------------------
+// SEARCH
+// ------------------------------
+
+#search-page {
+	.search-fields {
+		.well {
+			list-style-type: none; 
+			padding: 5px;
+			margin: 0 0 10px 0;
+		}
+	}
+
+	#result_found {
+		font-size: 22px;
+		color: #2980B9;
+	}
+}
+
+#search-bar {
+	padding-top: 20px; 
+	background: #ECF0F1;
+}
+
+#edit_account_detail .control-group label {
+	width: 100%;
+}

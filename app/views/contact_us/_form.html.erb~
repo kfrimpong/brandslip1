@@ -1,0 +1,57 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#admin_nav li").each(function(){
+      $(this).removeClass('active');
+    })
+    $("#li_contact_us").addClass("active");
+  });
+</script> 
+
+<%= form_for(@contact_u) do |f| %>
+  <% if @contact_u.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contact_u.errors.count, "error") %> prohibited this contact_u from being saved:</h2>
+      <ul>
+        <% @contact_u.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div style="">
+  <div style="width: 600px;display: inline-block">
+    <div style="width: 50%; float: left;">
+      <div class="field">
+        <%= f.label :name %><br />
+        <%= f.text_field :name %>
+      </div>
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.text_field :email %>
+      </div>
+      <div class="field">
+        <%= f.label :company_name %><br />
+        <%= f.text_field :company_name %>
+      </div>
+      <div class="field">
+        <%= f.label :location %><br />
+        <%= f.text_field :location %>
+      </div>
+    </div>
+     <div style="width: 50%; float: left;">
+      <div class="field">
+        <%= f.label :phone_no %><br />
+        <%= f.text_field :phone_no %>
+      </div>
+      <div class="field">
+        <%= f.label :message %><br />
+        <%= f.text_area :message, :id => 'text_area' %>
+      </div>
+    </div>
+  </div>
+  <div class="actions" style="text-align: center;width: 600px;margin-top: 10px">
+    <%= f.submit "Contact US", :class => 'btn btn-primary btn-small' %>
+    <%= link_to 'Back', home_path, :class => 'btn btn-primary btn btn-small', :style => 'color:white' %>
+  </div>    
+</div>
+<% end %>

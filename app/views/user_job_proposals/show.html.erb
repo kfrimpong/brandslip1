@@ -1,0 +1,19 @@
+<div style="padding-top: 35px; width: 100%; text-align: center;font-size: 14px">
+  <span style="font-size: 35px; padding-top: 15px">Your Job Proposal
+
+</span>
+<p id="notice"><%= notice %></p>
+<div style="text-align: justify; height: 111%; margin-left: 33%; width: 41%;">
+<p>
+  <b>Proposal details:</b>
+  <%= @user_job_proposal.proposal_details %>
+</p>
+</div>
+<p>
+  <b>Proposal cost:</b>
+  $<%= @user_job_proposal.proposal_cost %>
+</p>
+
+
+<%= link_to 'Home', home_path, :class => 'btn btn-mini btn-primary' %>
+</div>

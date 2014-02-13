@@ -1,0 +1,95 @@
+
+#post_bid_div, #post_suggestion_div{
+    width:100%;
+    /*height: 90px;*/
+}
+
+.affix{
+    position: absolute;
+    top: 125px;
+    width:225px;
+}
+
+#assignment_img{
+}
+
+.praposal-info{
+    border: solid 1px #d7d7d7;
+    padding: 15px 15px 13px;
+    font-size: 13px;
+    zoom: 1;
+    margin-top: 20px;   
+    height: 200px;
+    
+}
+
+.stats{
+    margin-top: 10px;
+}
+
+.desc{
+    margin-top: 10px;
+    line-height: 16px;
+    height: 32px;
+    overflow: hidden;    
+}
+
+.widget {
+background-color: #f3f3f3;
+padding: 10px;
+margin-bottom: 20px;
+width: 400px;
+margin-left: 35px;
+margin-top: 20px;
+}
+.widgetTitle {
+font-family: Georgia,Times New Roman;
+color: #50852c;
+font-size: 14px;
+padding: 5px;
+margin-bottom: 15px;
+border-bottom: solid 1px #e7e7e7;
+}
+
+.widgetContent {
+padding: 0 5px 5px;
+}
+
+.db-lnav-inbox-item {
+margin-bottom: 10px;
+font-size: 13px;
+}
+
+.db-lnav-inbox-item .eol-layout-x1 {
+float: right;
+}
+
+.eol-layout-last {
+padding-right: 0;
+}
+
+.eol-layout-first {
+padding-left: 0;
+}
+.eol-layout-x1 {
+width: 75px;
+}
+
+.left{
+    float: left;
+    width: 250px
+}
+#dashboard-nav {
+margin: 20px 0 0;
+padding: 15px 10px 0;
+font-size: 18px;
+color: #ccc;
+}
+#dashboard-nav a {
+font-size: 18px;
+color: #939393;
+}
+#dashboard-nav a.selected {
+color: #50852c;
+font-weight: bold;
+}

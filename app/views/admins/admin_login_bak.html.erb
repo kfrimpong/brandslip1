@@ -1,0 +1,20 @@
+<div>
+    <div class="signuplogo" style="padding-top: 50px;padding-bottom: 25px;text-align: center;">Brandslip</div>
+    <div style="padding-left: 35%">
+      <div class="error"><%= notice %></div>
+      <form action="/admin/authentication">
+        <div class="input-group">
+          <span class="input-group-addon input-large">@</span>
+          <input id="admin_email" name="admin_email" type="email" class="form-control input-large" placeholder="Username">
+        </div>        
+
+        <div class="input-group">
+          <span class="input-group-addon input-large">@</span>
+          <input id="admin_password" name="admin_password" size="30" type="password"  class="form-control input-large" placeholder="Password">
+        </div>           
+        <div style="margin-top: 15px">
+          <input name="commit" style="width: 53%" class="btn btn-primary btn-large" type="submit" value="Admin Log in">
+        </div>
+      </form>
+    </div>
+</div>

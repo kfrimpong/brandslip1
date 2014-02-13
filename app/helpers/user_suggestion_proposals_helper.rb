@@ -1,0 +1,2 @@
+module UserSuggestionProposalsHelper
+end

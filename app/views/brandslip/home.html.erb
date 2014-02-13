@@ -1,0 +1,812 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#my_brandslip").addClass("active");
+    
+    $("form#new_contact_u").submit(function(){
+      var submit = true;
+      var empty_boxes = [];
+      $("#new_contact_u input[type='text']:not('.not_required')").each(function(){
+        if($(this).val() == ""){
+          empty_boxes.push($(this).closest('div.control-group').find('label').text());
+          submit = false;
+        }
+      });
+          
+      $("#new_contact_u textarea").each(function(){
+        if($(this).val() == ""){
+          empty_boxes.push("Message");
+          submit = false;
+        }
+      });
+      if(submit == false){
+        //alert("Please enter " + empty_boxes.join(', ') +" fields...");
+        $("#btn_show_err_msg").click();
+        $("div#myModalErrorMessage").find(".modal-title").text("Error Message:");
+        $("div#myModalErrorMessage").find(".modal-body").text("Please enter " + empty_boxes.join(', ') + " fields...");
+        //$(".modal").css({"margin-top": "10%", "z-index": "25000"});        
+        return false;
+      }else{
+        $.ajax({
+          url: $(this).attr('action'),
+          type: "post",
+          data:$(this).serialize(),
+          beforeSend: function() {
+          },
+          complete: function() {
+          },
+          success: function() {
+            //alert("Thank you for contacting BrandSlip. We will get back to you soon..");
+        $("#btn_show_err_msg").click();
+        $("div#myModalErrorMessage").find(".modal-title").text("Message:");
+        $("div#myModalErrorMessage").find(".modal-body").text("Thank you for contacting BrandSlip. We will get back to you soon..");            
+          }
+        });  
+        return false;
+      }    
+      return false;
+    });   
+    
+  });
+  
+  $('#myTab a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  });
+  
+  $('#myModal').modal({
+    keyboard: false
+  });
+   
+</script> 
+
+<div class="container-fluit">
+<div class="row-fluit main-row">
+  <div class="span3 pull-left" id="menubar">
+  <div style="overflow: hidden">
+    <ul id="tabs" class="nav side-nav nav-tabs" data-tabs="tabs">
+      <% if current_user.user_type == 1 %>
+        <li class="active"><a href="#brandslips" data-toggle="tab">My Bids</a></li>
+      <% elsif current_user.user_type == 2 %>
+        <li class="active"><a href="#brandslips" data-toggle="tab">My BrandSlips</a></li>
+      <% end %>
+      <% if current_user.user_type == 1 %>
+        <li><a class="tab-menu2" href="#bids" data-toggle="tab">My BrandSlip Suggestions</a></li>
+      <% elsif current_user.user_type == 2 %>
+        <li><a class="tab-menu2" href="#bids" data-toggle="tab">My Bids on BrandSlip Suggestions</a></li>
+      <% end %>
+      <li><a class="tab-menu3" href="#inbox_div" data-toggle="tab">Inbox <span class="badge"><%= @inbox.length %></span></a></li>
+      <li><a class="tab-menu4" href="#sent_message_div" data-toggle="tab">Sent Messages <span class="badge"><%= @sent_msg.length %></span></a></li>
+      <li><a class="tab-menu5" href="#newsfeed" data-toggle="tab">Newsfeed</a></li>
+    </ul>
+  </div>
+  </div>
+
+  <div class="span9 pull-left tab-content" id="main-content">
+        <!-- bids div -->
+        <div id="brandslips" class="tab-pane active">
+          <ul class="unstyled">
+
+            <% if current_user.user_type == 1 %>
+            
+              <% if !@user_proposals.blank? %>
+
+                <% @user_proposals.each do |job| %>
+                  <li class="well" id="li_proposal_<%= job.proposal_id %>">
+                    <div class="clearfix"></div>
+                    <div id="post_bid_div">
+                      <div>
+                        <% if(job.is_assigned == 1 && job.is_mark_done == 1 && job.is_reviewed == 1) %>
+                          <a href="<%= review_rating_path(:job_id => job.id, :to_user => Job.find(job.id).job_user_id) %>" style="text-decoration: none;color:#00468C"><h2><%= job.job_title %></a></h2><br/>
+                        <% else %>
+                          <a href="<%= user_job_detail_path(:id => job.id) %>" style="text-decoration: none;color:#00468C"><h2><%= job.job_title %></h2></a><br/>
+                        <% end %>                            
+                        
+                        <span style="color: green">
+                          <% if(job.is_assigned == 1 && job.is_mark_done == 1 &&  job.is_reviewed.nil?) %>
+                            Please Review
+                          <% elsif(job.is_assigned == 1) %>
+                            BrandSlip in Progress
+                          <% end %>
+                        </span>
+                        <div class="box-bottom-bar">
+                          <div class="info first">
+                            <h3>$<%= job.job_price_fixed_type%></h3>
+                            <p>Minimum Starting Bid</p>
+                          </div>
+                          <div class="info highlight">
+                            <h3>$<%= UserJobProposal.where(:job_id => job.id, :user_id => current_user.id).first.proposal_cost %></h3>
+                            <p>PROPOSED</p>
+                          </div>
+
+
+                          <div class="button-bar">
+                            <% if(job.is_assigned == 1 && job.is_mark_done == 1 && job.is_reviewed == 1) %>
+                            <% else %>
+                              <%if job.is_assigned.nil? && job.assigned_to.nil?%> 
+                                <a href="<%= edit_bid_path(:id => job.job_id, :proposal_id => job.proposal_id)  %> " class="btn btn-primary btn-mini">Edit</a>
+                                <a style="color: white" onclick="show_delete_proposal_popup('<%= job.proposal_id %>')"
+                                 data-toggle="modal" href="#myModalDelete" class="btn btn-danger btn-mini">Delete</a>
+                              <%end%>
+                            <% end %>  
+                          </div>
+                        </div>
+                        <div style="clear: both"></div>
+                      </div>
+                    </div>
+                  </li>
+                <% end %>
+              <% else %>
+                <p>No Bids Currently</p>
+              <% end %>  
+           
+            <% elsif current_user.user_type == 2 %>
+
+              <% if !@user_jobs.blank? %>
+                <% @user_jobs.reverse.each do |job| %>
+                  <li class="well" id="li_job_<%= job.id %>">
+                    <div class="clearfix"></div>
+                    <div id="post_bid_div">
+                      <div>
+                        <% if(job.is_assigned == 1 && job.is_mark_done == 1 &&  job.is_reviewed == 1) %>
+                          <a href="<%= review_rating_path(:job_id => job.id, :to_user => job.assigned_to) %>" style="color:#00468C"><h1><%= job.job_title %></h1></a><br/>
+                        <% else %>
+                          <a href="<%= user_job_detail_path(:id => job.id) %>" style="color:#00468C"><h1><%= job.job_title %></h1></a><br/>
+                        <% end %>
+                        
+                        <span>
+                          <% if(job.is_assigned.nil?) %>
+                          <% elsif(job.is_assigned == 1 && job.is_mark_done.nil?) %>
+                            <span style="color: green">BrandSlip in Progress</span>
+                          <% elsif(job.is_assigned == 1 && job.is_mark_done == 1 &&  job.is_reviewed.nil?) %>
+                            <span style="color: green">Waiting for Review</span>
+                          <% elsif(job.is_assigned == 1 && job.is_mark_done == 1 &&  job.is_reviewed == 1) %>
+                            <span style="color: green">Please Review</span>
+                          <% end %>
+                        </span>
+                        <div class="box-bottom-bar">
+                          <div class="info first">
+                            <h3>$<%= job.job_price_fixed_type%></h3>
+                            <p>Minimum Starting Bid</p>
+                          </div>
+                          <% if(job.is_assigned.nil?) %>
+                            <div class="info">
+                              <h3><%= UserJobProposal.where(:job_id => job.id).count %></h3>
+                              <p>BIDS</p>
+                            </div>
+                          <% end %>
+                         
+                          <div class="button-bar">
+                            <% if(job.is_assigned == 1 && job.is_mark_done == 1 && job.is_reviewed == 1) %>
+                            <% else %>
+                              <% if job.job_type == 1 %>
+                                <% if job.is_assigned.nil? %>
+                                  <%= link_to 'Edit', edit_job_path(job, :type => 'public_speaking'), :class => 'btn btn-primary btn-mini' %> 
+                                <% end %>  
+                              <% else %>
+
+                              <% if job.is_assigned.nil? %>
+                                <%= link_to 'Edit', edit_job_path(job, :type => 'online'), :class => 'btn btn-primary btn-mini' %> 
+                                <% end %>
+                              <% end %>
+                              <% if job.is_assigned.nil? %>
+                              <a style="color: white" onclick="show_delete_jobs_popup('<%= job.id %>')"
+                                 data-toggle="modal" href="#myModalDelete" class="btn btn-danger btn-mini">Delete</a>
+                              <% end %>   
+                            <% end %>   
+                          </div>  
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                <% end %>
+              <% else %>
+              No Brandslips Currently
+              <% end %>  
+            <% end %>              
+          </ul>
+        </div>
+        <!-- bids div ends -->
+        
+        <!-- brandslip suggestion div -->
+        <div id="bids" class="tab-pane">
+          <ul class="unstyled">
+
+            <% if current_user.user_type == 1 %>
+              <% if !@brandslip_suggestions.blank? %> 
+                <% @brandslip_suggestions.reverse.each do |suggestion| %>
+                  <li class="well" id="li_suggestion_<%= suggestion.id %>">
+                    <div class="clearfix"></div>
+                    <div id="post_suggestion_div">
+                      <div>
+
+                        <% if(suggestion.is_assigned == 1 && suggestion.is_mark_done == 1 && suggestion.is_reviewed == 1) %>
+                          <a href="<%= suggestion_review_rating_path(:suggestion_id => suggestion.id, :to_user => suggestion.assigned_to) %>" style="color:#00468C"><h1><%= suggestion.title %></h1></a><br/>
+                        <% else %>
+                          <a href="<%= user_suggestion_detail_path(:id => suggestion.id) %>" style="color:#00468C"><h1><%= suggestion.title %></h1></a><br/>
+                        <% end %>
+
+                       <span>
+                          <% if(suggestion.is_assigned.nil?) %>
+                          <% elsif(suggestion.is_assigned == 1 && suggestion.is_mark_done.nil?) %>
+
+                            <span style="color: green">BrandSlip Suggestion in Progress</span>
+                          <% elsif(suggestion.is_assigned == 1 && suggestion.is_mark_done == 1 &&  suggestion.is_reviewed.nil?) %>
+                            <span style="color: green">Waiting for Review</span>
+                          <% elsif(suggestion.is_assigned == 1 && suggestion.is_mark_done == 1 && suggestion.is_reviewed == 1) %>
+                            <span style="color: green">Please Review</span>
+                          <% end %>
+                        </span>
+                        
+                        <div class="box-bottom-bar">
+                          <div class="info first">
+                            <h3>$<%= suggestion.price%></h3>
+                            <p>Maximum Suggested Bid</p>
+                          </div>
+                          <% if(suggestion.is_assigned.nil?) %>
+                            <div class="info">
+                              <h3><%= UserSuggestionProposal.where(:suggestion_id => suggestion.id).count%></h3>
+                              <p>BIDS</p>
+                            </div>
+                          <% end %>
+                          <div class="button-bar">
+                            <% if(suggestion.is_assigned == 1 && suggestion.is_mark_done == 1 && suggestion.is_reviewed == 1) %>
+                            <% else %>
+                           
+                              <% if suggestion.suggestion_type == 1 %>
+                                <% if suggestion.is_assigned.nil? && suggestion.assigned_to.nil?%>
+                                  <%= link_to 'Edit', edit_brandslip_suggestion_path(suggestion, :type => 'public_speaking'), :class => 'btn btn-primary btn-mini' %>
+                                <% end %>  
+
+                              <% else %>
+                               <% if suggestion.is_assigned.nil? && suggestion.assigned_to.nil?%>
+                                <%= link_to 'Edit', edit_brandslip_suggestion_path(suggestion, :type => 'online'), :class => 'btn btn-primary btn-mini' %> 
+                                <% end %>
+                              <% end %>
+                              <% if suggestion.is_assigned.nil? && suggestion.assigned_to.nil?%>
+                                <a style="color: white" onclick="show_delete_suggestion_popup('<%= suggestion.id %>')"
+                                   data-toggle="modal" href="#myModalDelete" class="btn btn-danger btn-mini">Delete</a>
+                              <% end %>     
+                            <% end %>     
+                          </div>
+                      </div>
+                    </div>
+                  </li>
+                <% end %> 
+              <% else %>
+              <p>No BrandSlip Suggestions Currently</p>
+              <% end %>                   
+            <% elsif current_user.user_type == 2 %>
+              <%if !@suggestion_proposals.blank? %>
+              
+                <% @suggestion_proposals.each do |suggestion| %>
+                  <%= puts suggestion.inspect%>
+                  <li class="well" id="li_proposal_<%= suggestion.proposal_id %>">
+                    <div class="clearfix"></div>
+                    <div id="post_bid_div">
+                      <div>
+                        <% if(suggestion.is_assigned == 1 && suggestion.is_mark_done == 1 && suggestion.is_reviewed == 1) %>
+                          <a href="<%= suggestion_review_rating_path(:suggestion_id => suggestion.id, :to_user => BrandslipSuggestion.find(suggestion.id).user_id) %>" style="text-decoration: none;color:#00468C"><h2><%= suggestion.title %></h2></a><br/>
+                        <% else %>
+                          <a href="<%= user_suggestion_detail_path(:id => suggestion.id) %>" style="text-decoration: none;color:#00468C"><h2><%= suggestion.title %></h2></a><br/>
+                        <% end %>                            
+                        
+                        <span style="color: green">
+                          <% if(suggestion.is_assigned == 1 && suggestion.is_mark_done == 1 &&  suggestion.is_reviewed == 1) %>
+                            Please Review
+                          <% elsif(suggestion.is_assigned == 1) %>
+
+                            BrandSlip Suggestion in Progress
+                          <% end %>
+                        </span>                              
+                          
+                        <div class="box-bottom-bar">
+                          <div class="info first">
+                            <h3>$<%= suggestion.price%></h3>
+                            <p>Maximum Suggested Bid</p>
+                          </div>
+                          <div class="info highlight">
+                            <h3>$<%= UserSuggestionProposal.where(:suggestion_id => suggestion.id, :user_id => current_user.id).first.proposal_cost%></h3>
+                            <p>PROPOSED</p>
+                          </div>
+                          <div class="button-bar">
+                            <% if(suggestion.is_assigned == 1 && suggestion.is_mark_done == 1 && suggestion.is_reviewed == 1) %>
+                            <% else %>
+                            <% if suggestion.is_assigned.nil? %>
+                              <a href="<%= edit_suggestion_bid_path(:id => suggestion.suggestion_id, :proposal_id => suggestion.proposal_id) %>" class="btn btn-primary btn-mini">Edit</a>
+                              <a style="color: white" onclick="show_delete_suggestion_proposal_popup('<%= suggestion.proposal_id %>')"
+                                 data-toggle="modal" href="#myModalDelete" class="btn btn-danger btn-mini">Delete</a>
+                            <%end%>
+                            <% end %>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                <% end %> 
+              <% else %>
+              No Bids on BrandSlip Suggestions
+              <% end %>                   
+            <% end %>              
+          </ul>
+        </div>
+        <!-- brandslip suggestion div ends -->        
+
+
+        <!-- inbox div starts -->
+        <div id="inbox_div" class="tab-pane">
+          <ul class="unstyled">
+          <%if !@inbox.blank? %>  
+            <% @inbox.each do |msg| %>
+              <li class="well" id="li_msg_<%= msg['id'] %>">
+                <div class="clearfix"></div>
+                <div class="message-box">
+                  
+                  <% if(msg.from_user.nil?) %>
+                    --
+                  <% else %>
+                    <% if(User.find(msg.from_user).nil?) %>
+                      --  
+                    <% else %>
+                      <% if(User.find(msg.from_user).user_type == 1) %>
+                        <span class="from_user">
+                          <a target="_blank" href="<%= brands_profile_show_path(:id => msg.from_user)%>"><%= msg['first_name'] %> <%= msg['last_name'] %> (<%= msg['company_name'] %>): </a>
+                        </span>
+                      <% elsif(User.find(msg.from_user).user_type == 2) %>
+                        <span class="from_user">
+                          <a target="_blank" href="<%= presenters_profile_show_path(:id => msg.from_user)%>"><%= msg['first_name'] %> <%= msg['last_name'] %> (<%= msg['company_name'] %>): </a>
+                        </span>
+                      <% end %>
+                    <% end %>
+                  <% end %>                    
+                 
+                  <span class="Subject">Subject : <%= msg['message_title'] %>
+                    <span class="pull-right"><%= msg['created_at'].strftime("%m/%d/%Y at %I:%M%p") %></span>
+                  </span>
+                  <span class="message_body span6">
+                    <%= msg['message_body'] %>
+                  </span>
+                  <div class="box-bottom-bar">
+                    <div class="button-bar">
+                      <a id="reply_to_msg" data-toggle="modal" href="#myModal" data-user-id="<%= msg['from_user'] %>"
+                             data-user-interest-id="<%= msg['user_interest_id'] %>" type="button" onclick="reply_to_message(this,'<%= msg['message_body'] %>')" 
+                             class="btn btn-primary btn-mini message_reply_id">Reply</a>
+                      <a style="color: white" onclick="show_delete_msg_popup('<%= msg['id'] %>')"
+                                 data-toggle="modal" href="#myModalDelete" class="btn btn-danger btn-mini">Delete</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          <% else %>
+            No Message Currently
+          <% end %>  
+          </ul>
+        </div>
+
+        <!-- sent messages div starts -->
+        <div id="sent_message_div" class="tab-pane">
+          <ul class="unstyled">
+            <%if !@sent_msg.blank?%>
+              <% @sent_msg.each do |msg| %>
+                <li class="well" id="li_sent_msg_<%= msg['id'] %>">
+                  <div class="clearfix"></div>
+                  <div class="message-box">
+                    
+                    <% if(msg.to_user.nil?) %>
+                      --
+                    <% else %>
+                      <% if(User.find(msg.to_user).nil?) %>
+                        --  
+                      <% else %>
+                        <% if(User.find(msg.to_user).user_type == 1) %>
+                          <span class="from_user">
+                            <a target="_blank" href="<%= brands_profile_show_path(:id => msg.to_user)%>"><%= msg['first_name'] %> <%= msg['last_name'] %> (<%= msg['company_name'] %>): </a>
+                          </span>
+                        <% elsif(User.find(msg.to_user).user_type == 2) %>
+                          <span class="from_user">
+                            <a target="_blank" href="<%= presenters_profile_show_path(:id => msg.to_user)%>"><%= msg['first_name'] %> <%= msg['last_name'] %> (<%= msg['company_name'] %>): </a>
+                          </span>
+                        <% end %>
+                      <% end %>
+                    <% end %>       
+                  
+                    <span class="Subject">Subject : <%= msg['message_title'] %>
+                      <span class="pull-right"><%= msg['created_at'].strftime("%m/%d/%Y at %I:%M%p") %></span>
+                    </span>
+                    <span class="message_body span6">
+                      <%= msg['message_body'] %>
+                    </span>
+                    <div class="box-bottom-bar">
+                      <div class="button-bar">
+                        <a style="color: white" onclick="show_delete_sent_msg_popup('<%= msg['id'] %>')"
+                             data-toggle="modal" href="#myModalDelete" class="btn btn-danger btn-mini">Delete</a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              <% end %>
+            <% else %>
+              No Message Currently
+            <% end %>  
+          </ul>
+        </div>
+        <!-- sent messages div ends -->
+        <!-- news feed div starts -->
+        <div id="newsfeed" class="tab-pane">
+          <div>
+            Newsfeed <span class="icon-user"></span><span style="float: right"><%= @ribbits.length %></span>
+          </div>
+          <div>
+            Followers<span style="float: right"><a href="<%= followers_users_path %>"><%= current_user.followers.count %></a></span>
+          </div>
+          <div>
+            Following<span style="float: right"><a href="<%= followings_users_path %>"><%= current_user.followeds.count %></a></span>
+          </div>
+          <div>
+            Your Posts<span style="float: right"><a href="<%= your_posts_path %>"><%= Ribbit.where(:user_id => current_user).count %></a></span>
+          </div>
+          <div style="margin-left: 20px" id="inboxWidget" class="widget">
+            <div>Add New Post</div>
+            <div>
+              <textarea cols="40" id="newsfeed_description" placeholder="Newsfeed Description" rows="3"></textarea><br/><br/>
+              <input type="button" class="btn btn-mini btn-primary" value="Add" onclick="add_newsfeed()" />
+              <%= image_tag("loader.gif",  :id => "newsfeed_add_ajaxloading", :style => "display:none") %>
+              <span id="newsfeed_add_success_msg"></span>
+            </div>
+          </div>
+
+          <ul class="unstyled">
+            <% @ribbits.reverse.each do |ribbit| %>
+              <tr>
+                <td>
+                  <div style="background-color: #f5f5f5;border: 2px solid #e3e3e3;margin-bottom: 5px;width: 100%">
+                    <table style="width: 100%">
+                      <tr>
+                        <td style="float: left;">
+                          <div style="padding-top: 10px; padding-bottom: 5px">
+                            <% if(ribbit.user_id.nil?) %>
+                              -- Posted 
+                              <%= ribbit.content %> (<%= ribbit.created_at.strftime("%b %d, %Y %H:%M:%S") %>)
+                            <% else %>
+                              <% if(User.find(ribbit.user_id).nil?) %>
+                                -- Posted 
+                                <%= ribbit.content %> (<%= ribbit.created_at.strftime("%b %d, %Y %H:%M:%S") %>)                                
+                              <% else %>
+                                <% if(User.find(ribbit.user_id).user_type == 1) %>
+                                  <a target="_blank" href="<%= brands_profile_show_path(:id => ribbit.user_id) %>"><%= User.find(ribbit.user_id).first_name.capitalize %></a> Posted 
+                                    <%= ribbit.content %> (<%= ribbit.created_at.strftime("%b %d, %Y %H:%M:%S") %>)
+                                <% elsif(User.find(ribbit.user_id).user_type == 2) %>
+                                  <a target="_blank" href="<%= presenters_profile_show_path(:id => ribbit.user_id)%>"><%= User.find(ribbit.user_id).first_name.capitalize %></a> Posted 
+                                    <%= ribbit.content %> (<%= ribbit.created_at.strftime("%b %d, %Y %H:%M:%S") %>)
+                                <% end %>
+                              <% end %>
+                            <% end %>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+            </table>
+
+        </div>
+
+      <!-- news feed div ends -->
+      <!-- reviews div starts -->
+      <div id="reviews">
+      </div>
+      <!-- reviews div ends -->
+      <!-- history div starts -->
+      <div id="history">
+      </div>
+      <!-- history div ends -->
+    </div>
+</div>
+
+</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= hidden_field_tag "from_user", current_user.id %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Message</h4>
+
+      </div>
+      <div class="modal-body">
+
+     <!-- <div id ="message_body"></div> -->
+ 
+        <div style="padding-left: 50px"class="input-group">
+          <% if current_user.user_type == 1 %>
+            <%= select(:msg_user, :interest,
+              Jobcategorymaster.all.collect{|s| ["#{s.category}(#{User.where(:user_type => 2, :interest => s.id).count})", s.id]}.append(["All(#{User.where(:user_type => 2).count})", -1]),
+              {:include_blank => 'Select User Interest'}) %><br/><br/>  
+
+            <%= select(:to, :user, User.where(:user_type => 2).collect{|u| ["#{u.first_name} #{u.last_name}", u.id]}, {:include_blank => "Select Presenter"}) %><br/><br/>
+          <% elsif current_user.user_type == 2 %>
+
+            <%= select(:msg_user, :interest,
+              Jobcategorymaster.all.collect{|s| ["#{s.category}(#{User.where(:user_type => 1, :interest => s.id).count})", s.id]}.append(["All(#{User.where(:user_type => 2).count})", -1]),
+              {:include_blank => 'Select User Interest'}) %><br/><br/>            
+            <%= select(:to, :user, User.where(:user_type => 1).collect{|u| ["#{u.first_name} #{u.last_name}", u.id]}, {:include_blank => "Select Brand"}) %><br/><br/>
+          <% end %>
+          <input id="message_title" class="message_title" style="width: 400px" type="text" placeholder="Type message title" /><br/><br/>
+          <textarea  rows="4" cols="50" style="width: 400px; color:#858585;" class="message_previous"  readonly>
+          <%if current_user.user_type==2%>
+          
+             
+               <% @previous_message=UserMessage.find(:all,:conditions=>['to_user=?' ,current_user.id]) %>
+        
+                <% if !@previous_message.blank? %>
+                  <% @previous_message.each do |message|%>
+                  <%if message.message_title.include?"Re"%>
+                    <%= message.message_body%> 
+                    <%= message.created_at.strftime("%m/%d/%Y")%>
+                    
+                    <%=  User.find(message[:from_user]).first_name%> 
+                  <%else%>
+                    
+                      <%= message.message_body%>
+                      <%= message.created_at.strftime("%m/%d/%Y")%>
+                      <%=  User.find(message[:from_user]).first_name%> 
+                  <%end%> 
+                 
+                  <%end%>
+                <%end%>  
+            <%else%>
+            
+             <% @previous_message=UserMessage.find(:all,:conditions=>['to_user=?' ,current_user.id]) %>
+              <% if !@previous_message.blank? %>
+                <%@previous_message.each do |message|%>
+               
+              
+                <%if message.message_title.include?"Re"%>
+                  <%= message.message_body%> 
+                   <%= message.created_at.strftime("%m/%d/%Y")%><%=  User.find(message[:from_user]).first_name%>
+                   
+                <%else%>
+                    <%= message.message_body%>
+                   <%= message.created_at.strftime("%m/%d/%Y")%><%=  User.find(message[:from_user]).first_name%>
+                    
+                <%end%> 
+          
+                <%end%>
+              <%end%>
+          <%end%>
+          </textarea>
+          <textarea class="message_body" rows="4" cols="50" id="message_body" style="width: 400px;" placeholder="Type your message">
+           
+        
+          </textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= image_tag("loader.gif",  :id => "ajaxloading", :style => "display:none") %>
+        <span id="success_msg"></span>
+        <button type="button" class="btn btn-primary btn-mini" onclick="send_message()">Send Message</button>
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModalDelete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <span id="success_msg"></span>
+        <button id="btn_delete_yes" type="button" data-dismiss="modal" class="btn btn-primary btn-mini">Delete</button>
+        <button type="button" id="btn_close" class="btn btn-default btn-mini" data-dismiss="modal">No</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<a style="display: none" id="btn_show_err_msg" data-toggle="modal" href="#myModalErrorMessage"></a>
+<!-- Modal -->
+<div class="modal fade" id="myModalErrorMessage">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="mymodelbrandslipcreate">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <b>You must fill out the Edit Account Details tab before you are able to post to BrandSlip Suggestion. The tab is located in the Edit Profile Section.</b>
+      </div>
+      <div class="modal-footer">   
+        <button type="button" id="btn_close" class="btn btn-default " data-dismiss="modal">Ok</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="mymodelbrandsearch_job">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <b>You must fill out the Edit Account Details tab before you are able to post to Bid. The tab is located in the Edit Profile Section.</b>
+      </div>
+      <div class="modal-footer">   
+        <button type="button" id="btn_close" class="btn btn-default " data-dismiss="modal">Ok</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="mymodelnew_job_edit_profile">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <b>You must fill out the Edit Account Details tab before you are able to post to BrandSlip . The tab is located in the Edit Profile Section.</b>
+      </div>
+      <div class="modal-footer">   
+        <button type="button" id="btn_close" class="btn btn-default " data-dismiss="modal">Ok</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="mymodelsearch_suggestion_edit_profile">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <b>You must fill out the Edit Account Details tab before you are able to post to Bid. The tab is located in the Edit Profile Section.</b>
+      </div>
+      <div class="modal-footer">   
+        <button type="button" id="btn_close" class="btn btn-default " data-dismiss="modal">Ok</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="payment_successfuly_done">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <b>Card Successfully Added!</b>
+      </div>
+      <div class="modal-footer">   
+        <button type="button" id="btn_close" class="btn btn-default " data-dismiss="modal">Ok</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#tabs').tab();
+        
+       if (<%= session[:return_to]=="new_suggestion"%>){ 
+        <%=session[:return_to]=nil%>
+        $('#mymodelbrandslipcreate').modal("show");  
+        $(".modal-body").focus();
+        }
+
+       if (<%= session[:value]=="search_job_edit_account"%>){ 
+
+        <%=session[:value]=nil%>
+        $('#mymodelbrandsearch_job').modal("show");  
+        $(".modal-body").focus();
+        }
+
+       if (<%= session[:new_value_job]=="new_job_edit_profile"%>){ 
+
+        <%=session[:new_value_job]=nil%>
+        $('#mymodelnew_job_edit_profile').modal("show");  
+        $(".modal-body").focus();
+        }
+       if (<%= session[:search_suggestion] == "search_suggestion_edit_profile"%>){ 
+
+        <%=session[:search_suggestion]=nil%>
+        $('#mymodelnew_job_edit_profile').modal("show");  
+        $(".modal-body").focus();
+        }
+        if (<%= session[:sucess_account]=="successfully"%>){ 
+
+        <%=session[:sucess_account]=nil%>
+        $('#payment_successfuly_done').modal("show");  
+        $(".modal-body").focus();
+        }
+        
+    });
+
+
+
+    function delete_suggestion(suggestion_id){
+    if(suggestion_id == ""){
+        alert("Brandslip suggestion not found");
+    }else{
+        $.ajax({
+            url: "delete_suggestion",
+            type: "post",
+            dataType: "json",
+            data: {
+                "suggestion_id": suggestion_id
+            },
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function(data) {
+                $('li#li_suggestion_'+suggestion_id).remove();
+                $("#myModalDelete").find("#btn_close").click();
+                window.location="<%= dashboard_path%>"
+            }
+        });   
+    }
+}
+function delete_jobs(job_id){
+    if(job_id == ""){
+        alert("Job not found");
+    }else{
+        $.ajax({
+            url: "delete_job",
+            type: "post",
+            dataType: "json",
+            data: {
+                "job_id": job_id
+            },
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function(data) {
+                $('li#li_job_'+job_id).remove();
+                $("#myModalDelete").find("#btn_close").click();
+                 window.location="<%= dashboard_path%>"
+            }
+        });   
+    }
+}
+$(".message_reply_id").click(function(){
+  $("select#to_user").val($(this).attr("data-user-id"))
+})
+
+</script> 

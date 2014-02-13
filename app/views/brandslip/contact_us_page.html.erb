@@ -1,0 +1,51 @@
+<div style="font-size: 35px; text-align: center">Contact Us</div>
+<div id="contact_brandslip" style="margin-top: 20px;width: 700px;margin: auto;">
+  <div class="well well-white" style="text-align: center">
+    <%= render "contact_us/form" %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#contact_us").addClass("active");
+    
+    $("form#new_contact_u").submit(function(){
+      var submit = true;
+      var empty_boxes = [];
+      $("#new_contact_u input[type='text']:not('.not_required')").each(function(){
+        if($(this).val() == ""){
+          empty_boxes.push($(this).closest('div.control-group').find('label').text());
+          submit = false;
+        }
+      });
+          
+      $("#new_contact_u textarea").each(function(){
+        if($(this).val() == ""){
+          empty_boxes.push("Message");
+          submit = false;
+        }
+      });
+      if(submit == false){
+        alert("Please enter " + empty_boxes.join(', ') +" fields...");
+        return false;
+      }else{
+        alert('submitting form');
+        $.ajax({
+          url: $(this).attr('action'),
+          type: "post",
+          data:$(this).serialize(),
+          beforeSend: function() {
+          },
+          complete: function() {
+          },
+          success: function() {
+            alert("Thank you for contacting BrandSlip. We will get back to you soon..");
+          }
+        });  
+        return false;
+      }    
+      return false;
+    });
+  });
+  
+</script> 

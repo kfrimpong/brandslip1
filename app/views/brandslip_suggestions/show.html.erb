@@ -1,0 +1,80 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#brandslip_suggestion").addClass("active");
+  });
+</script> 
+<div style="padding-top: 20px">
+<p style="font-size: 45px; color: #08C;text-align: center">Your BrandSlip Suggestion</p>
+<p id="notice" style="color: green;text-align: center"><%= notice %></p>
+</div>
+<div style="padding-left: 40%;padding-top: 20px;font-size: 14px">
+  <div style="width: 100%;">
+    <div style="width: 50%; float: left;">
+      <p>
+        <b>BrandSlip Title:</b>
+        <%= @brandslip_suggestion.title %>
+      </p>
+
+      <p>
+        <b>Description:</b>
+        <%= truncate(@brandslip_suggestion.description, :length => 20) %>
+      </p>
+
+      <p>
+        <b>Category:</b>
+        <%= @brandslip_suggestion.category.nil? ? "--" : Jobcategorymaster.find(@brandslip_suggestion.category).category %>
+      </p>
+
+      <p>
+        <b>Sub category:</b>
+        <%= @brandslip_suggestion.sub_category.nil? ? "--" : Jobsubcategorymaster.find(@brandslip_suggestion.sub_category).sub_category %>
+      </p>
+      <% if @brandslip_suggestion.suggestion_type == 1 %>
+        <p>
+          <b>Proof Selector:</b>
+          <%= @brandslip_suggestion.proof_selector.nil? ? "--" : @brandslip_suggestion.proof_selector %>
+        </p>
+      <% else %>
+        <p>
+          <b>Online Media Source:</b>
+          <%= @brandslip_suggestion.online_media_source.nil? ? "--" : @brandslip_suggestion.online_media_source %>
+        </p>        
+      <% end %>
+    </div>
+
+    <div style="width: 50%;">
+      <p>
+        <b>Starting Bid:</b>
+        <%= @brandslip_suggestion.price %>
+      </p>
+      <p>
+        <b>valid for:</b>
+        <%= @brandslip_suggestion.valid_for %> Days
+      </p>
+      <% if @brandslip_suggestion.suggestion_type == 1 %>
+        <p>
+          <b>Crowd Size:</b>
+          <%= @brandslip_suggestion.crowd_size %> Days
+        </p>
+      <% else %>
+        <p>
+          <b>Followers/Subscribers:</b>
+          <%= @brandslip_suggestion.followers_subscribers %>
+        </p>       
+      <% end %>
+      <p>
+        <b>start date:</b>
+        <%= @brandslip_suggestion.start_date.nil? ? "--" : @brandslip_suggestion.start_date.strftime("%b %d, %Y") %>
+      </p>
+      <p>
+        <b>Time:</b>
+        <%= @brandslip_suggestion.time.nil? ? "--" : @brandslip_suggestion.time.strftime("%H:%M:%S") %>
+      </p>
+    </div>
+  </div>
+</div>
+  <div style="padding-top: 50px;padding-left: 40%;display: inline-block;">
+  <%= link_to 'Edit', edit_brandslip_suggestion_path(@brandslip_suggestion), :class => 'btn btn-primary', :style => "color:white;  margin-right: 8px;" %> 
+  <%= link_to 'New BrandSlip Suggestion', new_brandslip_suggestion_path, :class => 'btn btn-primary', :style => "color:white; margin-right: 8px;" %> 
+  <%= link_to 'Home', home_path, :class => 'btn btn-primary', :style => "color:white; margin-right: 8px;" %> 
+  </div>

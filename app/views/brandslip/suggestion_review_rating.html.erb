@@ -1,0 +1,90 @@
+
+<div style="text-align: center;margin-bottom: 20px;margin-top: 20px">
+  <b>Rate Your Experience for - <span><%= @to_user %></span></b>
+</div>
+<div style="text-align: center;margin-bottom: 10px">Suggestion: <%= @suggestion_title %></div>
+<%= form_tag({:controller => "brandslip", :action => "add_suggestion_review_rating"}, {:id => 'form_submit_rating'}) do %>
+  <%= hidden_field_tag :from_user, current_user.id %>
+  <%= hidden_field_tag :to_user, @user_id %>
+  <%= hidden_field_tag :suggestion_id, params[:suggestion_id] %>
+  <div id="star" style="margin: auto"></div>
+  <div style="margin: auto;margin-top: 25px;text-align:center">
+    <textarea name="review_comment" id="review_comment" cols="50" rows="5" placeholder="Enter review"></textarea>
+  </div>
+  <div style="margin-top: 10px;text-align:center">
+    <%= submit_tag "Add", :class => 'btn btn-primary btn-mini' %>
+    <!-- <a href="/user_suggestion_detail/<%#= params[:suggestion_id] %>" class="btn btn-primary btn-mini">Back</a> -->
+  </div>
+  <div style="text-align: center" id="submit_review_msg"></div>
+<% end %> 
+  
+  
+<a style="display: none" id="btn_show_err_msg" data-toggle="modal" href="#myModalErrorMessage"></a>
+<!-- Modal -->
+<div class="modal fade" id="myModalErrorMessage">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Error Message</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->    
+
+<script type="text/javascript">
+  $(function() {
+    $.fn.raty.defaults.path = '/assets/ratings';
+    $('#star').raty({  
+      scoreName: 'entity[score]', 
+      precision: true, 
+      size: 25,
+      starHalf  : 'star-half-big.png',
+      starOff   : 'star-off-big.png',
+      starOn    : 'star-on-big.png'});
+    
+    
+    $("form#form_submit_rating").submit(function(){
+      var submit = true;
+      var empty_boxes = [];
+          
+        if($("#review_comment").val() == ""){
+          empty_boxes.push("Review");
+          submit = false;
+        }
+        if(submit == false){
+          //alert("Please enter Review");
+          $("#btn_show_err_msg").click();
+          $("div#myModalErrorMessage").find(".modal-body").text("Please enter Review");            
+          return false;
+        }else{
+          $.ajax({
+             url: $(this).attr('action'),
+             type: "post",
+             dataType: "json",
+             data:$(this).serialize(),
+             beforeSend: function() {
+             },
+             complete: function() {
+             },
+             success: function(data) {
+                if (data['success'] == false) {
+                  parent.location.replace(dashboard_path);
+                } else {               
+                  $("#submit_review_msg").text("Rating added successfully.").css('color', 'green');
+                  parent.location.replace(dashboard_path);
+                }
+            }
+         });  
+          return false;
+        }    
+      return false;
+    });    
+  });
+</script>
