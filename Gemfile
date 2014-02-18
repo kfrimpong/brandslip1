@@ -31,6 +31,15 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+group :development do
+	gem 'mysql2psql'
+	gem 'binding_of_caller'
+	gem 'better_errors'
+end
+
+group :production do
+	gem 'pg'
+end
 gem 'jquery-rails'
 gem "devise", "~> 2.0.2"
 gem "heroku"

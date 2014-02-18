@@ -5,7 +5,8 @@
 #   gem 'sqlite3'
 development:
    adapter: mysql2
-   database: brandslip_db
+   encoding: utf8
+   database: mysql
    host: localhost
    username: root
-   password: Adwoa123$
+   password: qCwu?$9t4YXW
