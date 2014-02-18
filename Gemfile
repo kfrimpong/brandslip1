@@ -7,10 +7,9 @@ gem 'balanced'
 
 gem 'flatui-rails'
 gem 'font-awesome-sass'
-
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-
+gem 'activerecord-postgresql-adapter'
 gem 'mysql2'
 gem 'therubyracer'
 gem 'execjs'
@@ -32,21 +31,22 @@ group :assets do
 end
 
 group :development do
-	gem 'mysql2psql'
 	gem 'binding_of_caller'
 	gem 'better_errors'
 end
 
 group :production do
-	gem 'pg'
+
 end
+
+gem 'pg'
 gem 'jquery-rails'
 gem "devise", "~> 2.0.2"
-gem "heroku"
 gem 'simple_form'
 gem 'carrierwave'
 gem "rmagick"
 gem 'carrierwave'
+
 #gem 'streamio-ffmpeg'
 #gem "paperclip-ffmpeg"
 #gem 'letsrate'
