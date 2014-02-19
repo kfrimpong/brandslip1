@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require bootstrap-modal
-
 //= require jquery_ujs
 //= require jquery-1.8.2
 //= require custom_balanced
