@@ -13,6 +13,7 @@
 //= require jquery
 //= require bootstrap-modal
 //= require jquery_ujs
+//= require jquery-1.8.2.js
 //= require custom_balanced
 //= require_self
 //= require_tree .
