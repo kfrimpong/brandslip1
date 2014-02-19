@@ -1,0 +1,6 @@
+###### Error from heroku
+
+Here's the error I'm getting from heroku:
+		2014-02-18T23:49:17.644539+00:00 heroku[router]: at=error code=H99 desc="Platform error" method=GET path=/ host=brandslip-kofi.herokuapp.com request_id=55788d7b-dc90-4c84-8fca-52cd7455fbc2 fwd="74.102.45.21" dyno= connect= service= status=503 bytes=
+
+
