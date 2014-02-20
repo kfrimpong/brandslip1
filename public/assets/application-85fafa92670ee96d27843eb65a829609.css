@@ -10372,8 +10372,8 @@ td.visible-print {
 }
 @font-face {
   font-family: "Flat-UI-Icons-16";
-  src: url("/assets/Flat-UI-Icons-16.woff");
-  src: url("/assets/Flat-UI-Icons-16.eot") format("embedded-opentype"), url("/assets/Flat-UI-Icons-16.woff") format("woff"), url("/assets/Flat-UI-Icons-16.ttf") format("truetype"), url("/assets/Flat-UI-Icons-16.svg#Flat-UI-Icons-16") format("svg");
+  src: url("/assets/Flat-UI-Icons-16-d3d9a6bec9dc63fb8d17fa93128fafd2.woff");
+  src: url("/assets/Flat-UI-Icons-16-3dc5590f8a339802d15dc3edfa02d09c.eot") format("embedded-opentype"), url("/assets/Flat-UI-Icons-16-d3d9a6bec9dc63fb8d17fa93128fafd2.woff") format("woff"), url("/assets/Flat-UI-Icons-16-8b54c92ee8d0881ab547682ea145d232.ttf") format("truetype"), url("/assets/Flat-UI-Icons-16.svg#Flat-UI-Icons-16") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -10505,8 +10505,8 @@ td.visible-print {
 
 @font-face {
   font-family: "Flat-UI-Icons-24";
-  src: url("/assets/Flat-UI-Icons-24.eot");
-  src: url("/assets/Flat-UI-Icons-24.eot") format("embedded-opentype"), url("/assets/Flat-UI-Icons-24.woff") format("woff"), url("/assets/Flat-UI-Icons-24.ttf") format("truetype"), url("/assets/Flat-UI-Icons-24.svg") format("svg");
+  src: url("/assets/Flat-UI-Icons-24-ceaedd5f5dc0cc0872d91e040ad36579.eot");
+  src: url("/assets/Flat-UI-Icons-24-ceaedd5f5dc0cc0872d91e040ad36579.eot") format("embedded-opentype"), url("/assets/Flat-UI-Icons-24-2b834b516db933bd077ed453e494c501.woff") format("woff"), url("/assets/Flat-UI-Icons-24-4d953a87c187fd40dc311f5e9c02f1d5.ttf") format("truetype"), url("/assets/Flat-UI-Icons-24-2ca87ba4b82c1d2c893828d28a2b9a12.svg") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -11904,7 +11904,7 @@ textarea,
 .checkbox .icon-to-fade,
 .radio .icon,
 .radio .icon-to-fade {
-  background: url("/assets/checkbox.png") -90px 0 no-repeat;
+  background: url("/assets/checkbox-0ad940edb7ea9be012faffb674eca35e.png") -90px 0 no-repeat;
   display: block;
   height: 20px;
   left: 0;
@@ -11930,19 +11930,19 @@ textarea,
 /* line 71, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_checkbox-and-radio.sass */
 .radio .icon,
 .radio .icon-to-fade {
-  background-image: url("/assets/radio.png");
+  background-image: url("/assets/radio-916b4ca97203608e0584ee554127c415.png");
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 2) {
   /* line 78, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_checkbox-and-radio.sass */
   .checkbox .icon {
-    background-image: url("/assets/checkbox-2x.png");
+    background-image: url("/assets/checkbox-2x-ab8af8a845652da76db17d92d7d2de98.png");
     background-size: 110px 110px;
   }
 
   /* line 83, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_checkbox-and-radio.sass */
   .radio .icon {
-    background-image: url("/assets/radio-2x.png");
+    background-image: url("/assets/radio-2x-ec5bdfa0538bb573ea1874078d2bb147.png");
     background-size: 110px 110px;
   }
 }
@@ -11979,7 +11979,7 @@ textarea,
 }
 /* line 17, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_toggle.sass */
 .toggle.toggle-off .toggle-radio {
-  background-image: url("/assets/toggle/icon-off.png");
+  background-image: url("/assets/toggle/icon-off-bfd51155a641038b99f29a4547582cdc.png");
   background-position: 0 0;
   color: white;
   left: 0;
@@ -11993,7 +11993,7 @@ textarea,
 }
 /* line 28, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_toggle.sass */
 .toggle .toggle-radio {
-  background: url("/assets/toggle/icon-on.png") right top no-repeat;
+  background: url("/assets/toggle/icon-on-5152e6717948b7cb511a35b11936e5f0.png") right top no-repeat;
   color: #1abc9c;
   display: block;
   font-weight: 700;
@@ -12035,12 +12035,12 @@ textarea,
 }
 /* line 60, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_toggle.sass */
 .toggle.toggle-icon.toggle-off .toggle-radio {
-  background-image: url("/assets/toggle/block-off.png");
+  background-image: url("/assets/toggle/block-off-1de5959d435085bc1a9648e0bc1bad48.png");
   background-position: 0 0;
 }
 /* line 64, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_toggle.sass */
 .toggle.toggle-icon .toggle-radio {
-  background-image: url("/assets/toggle/block-on.png");
+  background-image: url("/assets/toggle/block-on-27c2a45af8eb0706bc8342963c848ed1.png");
   background-position: 62px 0;
   border-radius: 6px;
   min-width: 27px;
@@ -12054,12 +12054,12 @@ textarea,
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 2) {
   /* line 78, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_toggle.sass */
   .toggle.toggle-off .toggle-radio {
-    background-image: url("/assets/toggle/icon-off-2x.png");
+    background-image: url("/assets/toggle/icon-off-2x-9284c6b3f008592e148b9c64052a7ca1.png");
     background-size: 30px 29px;
   }
   /* line 82, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_toggle.sass */
   .toggle .toggle-radio {
-    background-image: url("/assets/toggle/icon-on-2x.png");
+    background-image: url("/assets/toggle/icon-on-2x-189093103f9b44d09de95caeab1a246e.png");
     background-size: 30px 29px;
   }
 }
@@ -12808,7 +12808,7 @@ textarea,
 }
 /* line 12, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_todo.sass */
 .todo li {
-  background: #34495e url("/assets/todo/todo.png") 92% center no-repeat;
+  background: #34495e url("/assets/todo/todo-be8cb281faf02f84189435c2d2b6683c.png") 92% center no-repeat;
   background-size: 20px 20px;
   cursor: pointer;
   margin-top: 2px;
@@ -12831,7 +12831,7 @@ textarea,
 }
 /* line 25, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_todo.sass */
 .todo li.todo-done {
-  background: transparent url("/assets/todo/done.png") 92% center no-repeat;
+  background: transparent url("/assets/todo/done-ca2d738ddf508879d1db507ba4652dc8.png") 92% center no-repeat;
   background-size: 20px 20px;
   color: #1abc9c;
 }
@@ -12842,7 +12842,7 @@ textarea,
 
 /* line 33, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_todo.sass */
 .todo-search {
-  background: #1abc9c url("/assets/todo/search.png") 92% center no-repeat;
+  background: #1abc9c url("/assets/todo/search-d6012d0374beb0f30ed34ae4c57faec3.png") 92% center no-repeat;
   background-size: 16px 16px;
   border-radius: 6px 6px 0 0;
   color: #34495e;
@@ -12900,16 +12900,16 @@ input.todo-search-field.placeholder {
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 2) {
   /* line 70, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_todo.sass */
   .todo li {
-    background-image: "/assets/todo/todo-2x.png";
+    background-image: "/assets/todo/todo-2x-beb520843a1cb257891f1ce598256315.png";
   }
   /* line 72, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_todo.sass */
   .todo li.todo-done {
-    background-image: "/assets/todo/done-2x.png";
+    background-image: "/assets/todo/done-2x-4dc749203a385779b62eaed6c27e497d.png";
   }
 
   /* line 75, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_todo.sass */
   .todo-search {
-    background-image: "/assets/todo/search-2x.png";
+    background-image: "/assets/todo/search-2x-6e78d64369a80886b060f48a902984e2.png";
   }
 }
 /* line 2, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_footer.sass */
@@ -13166,7 +13166,7 @@ body.vjs-full-window {
 
 /* line 138, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-paused .vjs-play-control {
-  background: url("/assets/video/play.png") center -31px no-repeat;
+  background: url("/assets/video/play-1056f3f9841ba8f7312440f0085ce5b8.png") center -31px no-repeat;
   background-size: 16px 64px;
 }
 /* line 142, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
@@ -13175,7 +13175,7 @@ body.vjs-full-window {
 }
 /* line 144, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-paused .vjs-play-control div {
-  background: url("/assets/video/play.png") center 15px no-repeat;
+  background: url("/assets/video/play-1056f3f9841ba8f7312440f0085ce5b8.png") center 15px no-repeat;
   background-size: 16px 64px;
   height: 47px;
   -webkit-transition: opacity 0.25s;
@@ -13187,7 +13187,7 @@ body.vjs-full-window {
 
 /* line 150, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-playing .vjs-play-control {
-  background: url("/assets/video/pause.png") center -31px no-repeat;
+  background: url("/assets/video/pause-9057f1ff6d7a517948c5a738080cd5f2.png") center -31px no-repeat;
   background-size: 15px 64px;
 }
 /* line 154, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
@@ -13196,7 +13196,7 @@ body.vjs-full-window {
 }
 /* line 157, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-playing .vjs-play-control div {
-  background: url("/assets/video/pause.png") center 15px no-repeat;
+  background: url("/assets/video/pause-9057f1ff6d7a517948c5a738080cd5f2.png") center 15px no-repeat;
   background-size: 15px 64px;
   height: 47px;
   -webkit-transition: opacity 0.25s;
@@ -13221,7 +13221,7 @@ body.vjs-full-window {
 
 /* line 172, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-mute-control {
-  background: url("/assets/video/volume-full.png") center -48px no-repeat;
+  background: url("/assets/video/volume-full-66be79322020a2402c8ebe007964290a.png") center -48px no-repeat;
   background-size: 16px 64px;
   cursor: pointer !important;
   position: absolute;
@@ -13235,11 +13235,11 @@ body.vjs-full-window {
 /* line 187, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-mute-control.vjs-vol-0,
 .vjs-mute-control.vjs-vol-0 div {
-  background-image: url("/assets/video/volume-off.png");
+  background-image: url("/assets/video/volume-off-67f5c005be57571092f6ff5863186dd4.png");
 }
 /* line 191, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-mute-control div {
-  background: #2c3e50 url("/assets/video/volume-full.png") no-repeat center 2px;
+  background: #2c3e50 url("/assets/video/volume-full-66be79322020a2402c8ebe007964290a.png") no-repeat center 2px;
   background-size: 16px 64px;
   height: 18px;
   -webkit-transition: opacity 0.25s;
@@ -13382,7 +13382,7 @@ body.vjs-full-window {
 
 /* line 294, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-fullscreen-control {
-  background-image: url("/assets/video/fullscreen.png");
+  background-image: url("/assets/video/fullscreen-d22066528c74feb72c09b49e7d35072a.png");
   background-position: center -47px;
   background-size: 15px 64px;
   cursor: pointer !important;
@@ -13397,7 +13397,7 @@ body.vjs-full-window {
 /* line 308, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_video.sass */
 .vjs-fullscreen-control div {
   height: 18px;
-  background: url("/assets/video/fullscreen.png") no-repeat center 2px;
+  background: url("/assets/video/fullscreen-d22066528c74feb72c09b49e7d35072a.png") no-repeat center 2px;
   background-size: 15px 64px;
   -webkit-transition: opacity 0.25s;
   -moz-transition: opacity 0.25s;
@@ -13570,7 +13570,7 @@ body.vjs-full-window {
 
 /* line 4, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_login.sass */
 .login {
-  background: url("/assets/login/imac.png") 0 0 no-repeat;
+  background: url("/assets/login/imac-001d558db02635eb91f4eaa1c03a85b9.png") 0 0 no-repeat;
   background-size: 940px 778px;
   color: white;
   margin-bottom: 77px;
@@ -13677,7 +13677,7 @@ body.vjs-full-window {
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 2) {
   /* line 93, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/modules/_login.sass */
   .login {
-    background-image: url("/assets/login/imac-2x.png");
+    background-image: url("/assets/login/imac-2x-b67953b7ddd3a3afea608100626d1055.png");
   }
 }
 /* line 10, ../../../../.rvm/gems/ruby-2.0.0-p247/gems/flatui-rails-0.0.4/vendor/assets/stylesheets/flat-ui/_spaces.sass */
