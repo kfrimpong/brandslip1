@@ -11,7 +11,6 @@ gem 'font-awesome-sass'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 gem 'activerecord-postgresql-adapter'
 gem 'mysql2'
-gem 'therubyracer'
 gem 'execjs'
 gem 'will_paginate'
 
@@ -41,11 +40,10 @@ end
 
 gem 'pg'
 gem 'jquery-rails'
-gem "devise", "~> 2.0.2"
 gem 'simple_form'
 gem 'carrierwave'
 gem "rmagick"
-gem 'carrierwave'
+gem 'figaro'
 
 #gem 'streamio-ffmpeg'
 #gem "paperclip-ffmpeg"

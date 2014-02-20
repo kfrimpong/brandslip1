@@ -76,6 +76,9 @@ GEM
       multipart-post (~> 1.2.0)
     faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
+    figaro (0.7.0)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
     flatui-rails (0.0.4)
       bootstrap-sass (= 2.2.2)
       railties (>= 3.1)
@@ -172,6 +175,7 @@ DEPENDENCIES
   debugger
   devise (~> 2.0.2)
   execjs
+  figaro
   flatui-rails
   font-awesome-sass
   jquery-rails
