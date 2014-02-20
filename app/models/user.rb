@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   mount_uploader :image, ImageUploader
                 
   validates_presence_of :email, :first_name,  :user_type,  
-                          :last_name, :company_name,  :dob
+                          :last_name, :company_name
                         
   validates :email, :format => { :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i }, :allow_blank => true
                         
