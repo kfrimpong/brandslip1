@@ -18,7 +18,8 @@ class DevisesessionController < Devise::SessionsController
           Rails.logger.debug(resource)
           Rails.logger.debug("--------------------------")
           session[:user] = resource.id
-          render :json => {:success => true}
+          redirect_to home_path
+          flash[:success] = "Successfully Logged in."
         else
          Rails.logger.debug("Inside failure.........")
          render:json => {:success => false, :errors => ["Invalid password."]}

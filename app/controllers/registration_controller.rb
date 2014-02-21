@@ -22,12 +22,12 @@ class RegistrationController < Devise::RegistrationsController
     if user_failure == false
       render :json => {"response" => "1"}
     else 
-       render :json => {"response" => "0", "error" => @user.errors}
+      render :json => {"response" => "0", "error" => @user.errors}
     end
   end
   
   def update
     super  
   end 
-  
+
 end
