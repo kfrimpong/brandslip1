@@ -44,8 +44,9 @@ jQuery(document).ready(function($) {
 		init = function() {
 			$height = $(window).height();
 			$slider.css('height', $height);
-			$('body').css('padding-top', $height);
+			
 			$slides.each(function() {
+				$('body').css('padding-top', $height);
 				$content = $(this).find('.slide-content');
 				console.log($content.width());
 				$contentHeight = $content.actual('outerHeight');
