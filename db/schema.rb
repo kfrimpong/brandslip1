@@ -50,6 +50,13 @@ ActiveRecord::Schema.define(:version => 20140106045751) do
     t.integer  "is_brand_reviewed"
   end
 
+  create_table "cities", :id => false, :force => true do |t|
+    t.string "city",       :limit => 50, :null => false
+    t.string "state_code", :limit => 2,  :null => false
+  end
+
+  add_index "cities", ["state_code"], :name => "idx_state_code"
+
   create_table "contact_us", :force => true do |t|
     t.string   "name"
     t.string   "email"
@@ -126,6 +133,10 @@ ActiveRecord::Schema.define(:version => 20140106045751) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "states", :primary_key => "state_code", :force => true do |t|
+    t.string "state", :limit => 22, :null => false
   end
 
   create_table "transactions", :force => true do |t|
